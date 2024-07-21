@@ -1,0 +1,15 @@
+<h1>Home Page</h1>
+@if (isloggedin == true) {
+<p>welcome Mr: {{ userEmail }}</p>
+
+}@else {
+<p class="lead">
+  You Need To
+  <a
+    class="fw-bold text-decoration-none text-danger"
+    routerLink="/login"
+    routerLinkActive="router-link-active"
+    >Login</a
+  >
+</p>
+}
