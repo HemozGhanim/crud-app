@@ -1,4 +1,6 @@
-<form [formGroup]="credentials" (ngSubmit)="onSubmit()">
+<form [formGroup]="credentials" (submit)="onSubmit()">
+
+
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Email address</label>
     <input
@@ -10,16 +12,21 @@
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" formControlName="password"  />
+    <input
+      type="password"
+      class="form-control"
+      id="exampleInputPassword1"
+      formControlName="password"
+    />
   </div>
 
-  <button type="submit" class="btn btn-primary" >Login
-    @if (loadding) {
-          <div class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    }
-
-</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!credentials.valid">
+    @if (loadding == true) {
+    <span
+      class="spinner-border spinner-border-sm mx-1"
+      aria-hidden="true"
+    ></span>
+    <span role="status">Loading...</span>
+    } @else { Login }
+  </button>
 </form>
-

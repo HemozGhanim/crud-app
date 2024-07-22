@@ -15,54 +15,54 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav w-100">
+        @if (isLoggedin == true) {
         <li class="nav-item">
           <a
             class="nav-link active"
             aria-current="page"
             routerLink="/home"
-            routerLinkActive="router-link-active"
+            routerLinkActive="bg-black bg-opacity-50 text-white rounded fw-medium"
             >Home</a
           >
         </li>
-        @if (isLoggedin == true) {
         <li class="nav-item">
           <a
             class="nav-link"
             routerLink="/admin"
-            routerLinkActive="router-link-active"
+            routerLinkActive="bg-black bg-opacity-50 text-white rounded fw-medium"
             >admin</a
           >
         </li>
-        <li class="nav-item">
+        <li class="nav-item ms-auto">
           <a
             class="nav-link"
             routerLink="/"
-            routerLinkActive="router-link-active"
+            routerLinkActive="bg-danger text-white rounded fw-medium"
             (click)="signOut()"
             >signout</a
           >
         </li>
-        }
-        @else {
-        <li class="nav-item">
+        } @else {
+        <li class="nav-item ms-auto">
           <a
             class="nav-link"
             routerLink="/signup"
-            routerLinkActive="router-link-active"
-            >signup</a
+            routerLinkActive="bg-black bg-opacity-50 text-white rounded fw-medium"
+            ><i class="bi bi-person-add me-1"></i> signup</a
           >
         </li>
-        <li class="nav-item">
+        <li class="nav-item mx-1">
           <a
-            class="nav-link"
+            class="nav-link justify-content-end"
             routerLink="/login"
-            routerLinkActive="router-link-active"
-            >login</a
+            routerLinkActive="bg-black bg-opacity-50 text-white rounded fw-medium"
+          >
+            <i class="bi bi-box-arrow-in-right me-1"></i>
+            login</a
           >
         </li>
         }
-
       </ul>
     </div>
   </div>

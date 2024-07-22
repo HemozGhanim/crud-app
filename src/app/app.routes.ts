@@ -11,12 +11,13 @@ import { inject } from '@angular/core';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'home',
     pathMatch: 'full',
   },
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'login',
@@ -29,11 +30,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
-    canActivate: [() => inject(authGuard).canActivate() as CanActivateFn[]],
-  },
-  {
-    path: 'no-access',
-    component: NoAccessComponent,
+    canActivate: [authGuard],
   },
   {
     path: '**',

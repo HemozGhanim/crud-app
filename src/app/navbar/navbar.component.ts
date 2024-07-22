@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnChanges, OnInit, DoCheck } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -11,22 +11,19 @@ import { Router } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, DoCheck {
   isLoggedin: any;
-  authService = inject(AuthService);
-  router = inject(Router);
 
-  constructor() {}
+  constructor(private _authService: AuthService, private _router: Router) {}
 
   ngOnInit(): void {
-    this.router.events.subscribe((event) => {
-      if (event.constructor.name === 'NavigationEnd') {
-        this.isLoggedin = this.authService.isLoggedIn();
-      }
-    });
+    this.isLoggedin = this._authService.isLoggedIn();
   }
-  public signOut() {
-    this.authService.signOut();
-    this.router.navigate(['/']);
+  ngDoCheck(): void {
+    this.isLoggedin = this._authService.isLoggedIn();
+  }
+  signOut() {
+    this._authService.signOut();
+    this._router.navigate(['login']);
   }
 }

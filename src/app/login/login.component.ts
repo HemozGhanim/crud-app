@@ -24,20 +24,21 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
     returnSecureToken: new FormControl(true),
   });
-
-  authService = inject(AuthService);
-  router = inject(Router);
   loadding: boolean = false;
-
-  constructor() {}
+  responseError: boolean = false;
+  constructor(private _authService: AuthService, private _router: Router) {}
   ngOnInit(): void {}
   onSubmit() {
     if (this.credentials.valid) {
       this.loadding = true;
-      this.authService.login(this.credentials.value).subscribe((data: any) => {
-        if (this.authService.isLoggedIn()) {
+      this._authService.login(this.credentials.value).subscribe((data: any) => {
+        if (this._authService.isLoggedIn()) {
+          this.loadding = true;
+          this.responseError = false;
+          this._router.navigate(['/home']);
+        } else {
           this.loadding = false;
-          this.router.navigate(['/home']);
+          this.responseError = true;
         }
       });
     }
