@@ -32,7 +32,6 @@
         type="text"
         class="form-control"
         [(ngModel)]="orderData"
-        aria-label="Text input with segmented dropdown button"
         (keydown.enter)="createOrder()"
       />
       <button
@@ -64,24 +63,50 @@
     @for (order of orders; track $index) {
     <div
       href="#"
-      class="list-group-item list-group-item-action d-flex gap-3 py-3"
+      class="list-group-item list-group-item-action d-flex flex-wrap py-3"
       aria-current="true"
     >
-      <img
-        src="order_logo.png"
-        alt="twbs"
-        width="32"
-        height="32"
-        class="rounded-circle flex-shrink-0"
-      />
-      <div class="d-flex w-100 align-items-center">
-        <div>
-          <h6 class="mb-0">{{ order.orderName }}</h6>
+      <div class="d-flex gap-3 py-3 w-100">
+        <img
+          src="order_logo.png"
+          alt="twbs"
+          width="32"
+          height="32"
+          class="rounded-circle flex-shrink-0"
+        />
+        <div class="d-flex w-100 align-items-center">
+          <div>
+            <h6 class="mb-0">{{ order.orderName }}</h6>
+          </div>
         </div>
+        <button
+          type="button"
+          class="btn btn-warning btn-sm text-white"
+          (click)="edit = !edit"
+        >
+          <i class="bi bi-pencil-square"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm text-white">
+          <i class="bi bi-trash-fill"></i>
+        </button>
       </div>
-      <button type="button" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-pen-fill"></i>
-      </button>
+      @if(edit == true){
+      <div class="w-100 d-flex flex-nowrap gap-2 align-item-center">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="EditorderData"
+          (keydown.enter)="EditOrder(EditorderData)"
+        />
+        <button
+          type="button"
+          class="btn btn-success btn-sm text-white"
+          (click)="EditOrder(EditorderData)"
+        >
+          <i class="bi bi-check2-all"></i>
+        </button>
+      </div>
+      }
     </div>
     }
   </div>

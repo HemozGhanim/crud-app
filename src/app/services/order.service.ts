@@ -22,20 +22,7 @@ export class OrderService {
     this.userLocalId = JSON.parse(this._cookieService.get('localId'));
   }
   getOrders() {
-    return this.http
-      .get(`${this.baseUrl}orders/${this.userLocalId}.json`)
-      .subscribe({
-        next: (data) => {
-          if (data == null) {
-            return;
-          }
-          this.orders = Object.values(data);
-        },
-        error: (error) => {
-          console.log(error);
-          throw new Error(error);
-        },
-      });
+    return this.http.get(`${this.baseUrl}orders/${this.userLocalId}.json`);
   }
   createOrder(order: any): Observable<any> {
     return this.http.post(`${this.baseUrl}orders/${this.userLocalId}.json`, {

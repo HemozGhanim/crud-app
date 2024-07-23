@@ -13,6 +13,8 @@ import { OrderData } from '../models/orders';
 })
 export class AdminComponent implements OnInit {
   orderData = '';
+  EditorderData = '';
+  edit: boolean = false;
   orders: OrderData[] = [];
   uploadOrder: any = null;
   loadding: boolean = false;
@@ -24,7 +26,18 @@ export class AdminComponent implements OnInit {
     this.getOrders();
   }
   getOrders() {
-    this.orders = this._orderService.orders;
+    this._orderService.getOrders().subscribe({
+      next: (data) => {
+        if (data == null) {
+          return;
+        }
+        this.orders = Object.values(data);
+      },
+      error: (error) => {
+        console.log(error);
+        throw new Error(error);
+      },
+    });
   }
   createOrder() {
     this.loadding = true;
@@ -44,4 +57,5 @@ export class AdminComponent implements OnInit {
       },
     });
   }
+  EditOrder(EditorderData: string) {}
 }
