@@ -1,7 +1,89 @@
-<h1>Admin</h1>
-<h2>Orders</h2>
-<ul>
-  @for (order of orders; track $index) {
-  <li>{{ order.name }}</li>
+<div class="container">
+  @if (uploadOrder == true) {
+  <div
+    class="toast-container p-3 bottom-0 end-0"
+    id="toastPlacement"
+    data-original-class="toast-container p-3"
+  >
+    <div class="toast fade show text-bg-success">
+      <div class="toast-body text-uppercase">order_Added_Successfully !!</div>
+    </div>
+  </div>
+  } @else if (uploadOrder == false) {
+  <div
+    class="toast-container p-3 bottom-0 end-0"
+    id="toastPlacement"
+    data-original-class="toast-container p-3"
+  >
+    <div class="toast fade show text-bg-danger">
+      <div class="toast-body text-uppercase">Error_in_Add_Order !!</div>
+    </div>
+  </div>
+  } @else { }
+  <div
+    class="d-flex align-items-center flex-wrap p-3 my-4 text-white bg-purple rounded shadow-sm"
+  >
+    <i class="bi bi-database-add me-3" style="font-size: 2rem"></i>
+    <div class="lh-1">
+      <h1 class="h6 mb-0 text-white lh-1">Add Your Order Here</h1>
+    </div>
+    <div class="w-100 input-group my-2">
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="orderData"
+        aria-label="Text input with segmented dropdown button"
+        (keydown.enter)="createOrder()"
+      />
+      <button
+        type="button"
+        (click)="createOrder()"
+        class="btn"
+        [class]="uploadOrder ? 'btn-success' : 'btn-outline-light'"
+      >
+        @if (loadding == true) {
+        <span
+          class="spinner-border spinner-border-sm mx-1"
+          aria-hidden="true"
+        ></span>
+        } @else {
+        <i
+          class="bi fw-bold"
+          [class]="uploadOrder ? 'bi-check2-all ' : 'bi-plus-lg'"
+          style="font-size: 1.2em"
+        ></i
+        >}
+      </button>
+    </div>
+  </div>
+  @if(orders.length == 0){
+  <h1>Add Your Order Here</h1>
+  } @else {
+
+  <div class="list-group text-start">
+    @for (order of orders; track $index) {
+    <div
+      href="#"
+      class="list-group-item list-group-item-action d-flex gap-3 py-3"
+      aria-current="true"
+    >
+      <img
+        src="order_logo.png"
+        alt="twbs"
+        width="32"
+        height="32"
+        class="rounded-circle flex-shrink-0"
+      />
+      <div class="d-flex w-100 align-items-center">
+        <div>
+          <h6 class="mb-0">{{ order.orderName }}</h6>
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-pen-fill"></i>
+      </button>
+    </div>
+    }
+  </div>
   }
-</ul>
+</div>

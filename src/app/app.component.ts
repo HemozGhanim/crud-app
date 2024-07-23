@@ -1,8 +1,7 @@
-import { authGuard } from './auth/auth.guard';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
-import { AuthService } from './services/auth.service';
+import { OrderService } from './services/order.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,7 +10,9 @@ import { AuthService } from './services/auth.service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  constructor() {}
+  constructor(private _orderService: OrderService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._orderService.getOrders();
+  }
 }

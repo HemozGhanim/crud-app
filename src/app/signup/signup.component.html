@@ -1,45 +1,73 @@
-<div class="position-relative">
-  @if (responseError) {
-  <div class="alert alert-danger text-capitalize" role="alert">
-    {{ errorMessages }} !!
-  </div>
-  } @if (createdSuccess) {
-  <div class="alert alert-success text-capitalize" role="alert">
-    Email was created successfully !!
-  </div>
-  }
-  <form [formGroup]="createUserData" (submit)="onSubmitCreateAccount()">
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Email address</label>
-      <input
-        type="email"
-        class="form-control"
-        id="email"
-        aria-describedby="emailHelp"
-        formControlName="email"
-      />
+<div
+  class="d-flex justify-content-center align-items-center py-4 container position-relative h-full"
+>
+  <main class="form-signin w-100 m-auto">
+    @if (responseError) {
+    <div class="alert alert-danger text-capitalize" role="alert">
+      {{ errorMessages }} !!
     </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input
-        type="password"
-        formControlName="password"
-        class="form-control"
-        id="enterPassword"
-      />
+    } @if (createdSuccess) {
+    <div class="alert alert-success text-capitalize" role="alert">
+      Email was created successfully !!
     </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label"
-        >Re-enter Password</label
-      >
-      <input
-        type="password"
-        [(ngModel)]="confirmPassword"
-        [ngModelOptions]="{ standalone: true }"
-        class="form-control"
-        id="Re-enterPassword"
-      />
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+    }
+    <form [formGroup]="createUserData" (submit)="onSubmitCreateAccount()">
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col col-md-6">
+          <img class="mb-4 w-75" src="signup.svg" alt="" />
+        </div>
+        <div
+          class="col col-md-6 d-flex flex-wrap justify-content-center align-items-center"
+        >
+          <div class="w-75">
+            <h1 class="h3 mb-5 fw-normal w-100">Please sign-up</h1>
+            <div class="form-floating my-2 w-100">
+              <input
+                type="email"
+                formControlName="email"
+                class="form-control"
+                id="floatingInput"
+                placeholder="name@example.com"
+              />
+              <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating my-2 w-100">
+              <input
+                type="password"
+                formControlName="password"
+                class="form-control"
+                id="floatingPassword"
+                placeholder="Password"
+              />
+              <label for="floatingPassword">Password</label>
+            </div>
+            <div class="form-floating my-2 w-100">
+              <input
+                type="password"
+                [(ngModel)]="confirmPassword"
+                [ngModelOptions]="{ standalone: true }"
+                class="form-control"
+                id="floatingPassword1"
+                placeholder="Re-enter Password"
+              />
+              <label for="floatingPassword1">Re-enter Password</label>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary mt-3"
+              [disabled]="!createUserData.valid"
+            >
+              @if (loadding == true) {
+              <span
+                class="spinner-border spinner-border-sm mx-1"
+                aria-hidden="true"
+              ></span>
+              <span role="status">Loading...</span>
+              } @else { sign-up }
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
 </div>

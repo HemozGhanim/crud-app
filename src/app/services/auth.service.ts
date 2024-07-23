@@ -3,9 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, Observable, Subject, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
-import e from 'express';
-import { FormGroup } from '@angular/forms';
-import { userData } from '../models/userdata';
 @Injectable({
   providedIn: 'root',
 })
@@ -28,10 +25,12 @@ export class AuthService {
       .post(`${this.baseUrl}signInWithPassword?key=${this.API_key}`, data)
       .pipe(
         tap((result: any) => {
-          this.cookieService.set('authUser', JSON.stringify(result));
+          this.cookieService.set('authUser', JSON.stringify(result.idToken));
+          this.cookieService.set('localId', JSON.stringify(result.localId));
+          this.cookieService.set('userEmail', JSON.stringify(result.email));
         }),
         catchError((error) => {
-          throw error;
+          throw new Error(error);
         })
       );
   }
@@ -42,7 +41,9 @@ export class AuthService {
       .post(`${this.baseUrl}signUp?key=${this.API_key}`, data)
       .pipe(
         tap((result: any) => {
-          this.cookieService.set('authUser', JSON.stringify(result));
+          this.cookieService.set('authUser', JSON.stringify(result.idToken));
+          this.cookieService.set('localId', JSON.stringify(result.localId));
+          this.cookieService.set('userEmail', JSON.stringify(result.email));
         }),
         catchError((error) => {
           throw error;
@@ -52,6 +53,8 @@ export class AuthService {
 
   signOut() {
     this.cookieService.delete('authUser');
+    this.cookieService.delete('localId');
+    this.cookieService.delete('userEmail');
     this.isLoggedIn();
   }
 

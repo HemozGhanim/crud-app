@@ -23,8 +23,8 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userData = this.cookieService.get('authUser') || '';
-    this.userEmail = this.userData ? JSON.parse(this.userData).email : '';
+    this.userData = this.cookieService.get('userEmail') || '';
+    this.userEmail = JSON.parse(this.userData);
     this.isloggedin = this.service.isLoggedIn();
   }
 }
