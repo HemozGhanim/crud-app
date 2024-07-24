@@ -1,4 +1,7 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary w-100">
+<nav
+  class="navbar bg-dark navbar-expand-lg border-body w-100"
+  data-bs-theme="dark"
+>
   <div class="container-fluid px-5">
     <a class="navbar-brand" routerLink="/" routerLinkActive="router-link-active"
       >CRUD App</a
@@ -14,12 +17,12 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav w-100">
+    <div class="collapse navbar-collapse pt-md-0 pt-3" id="navbarNav">
+      <ul class="navbar-nav w-100 gap-2">
         @if (isLoggedin == true) {
         <li class="nav-item">
           <a
-            class="nav-link active"
+            class="nav-link active px-3"
             aria-current="page"
             routerLink="/home"
             routerLinkActive="bg-black bg-opacity-50 text-white rounded fw-medium"
@@ -28,25 +31,26 @@
         </li>
         <li class="nav-item">
           <a
-            class="nav-link"
+            class="nav-link px-3"
             routerLink="/orders"
             routerLinkActive="bg-black bg-opacity-50 text-white rounded fw-medium"
             >Orders</a
           >
         </li>
-        <li class="nav-item ms-auto">
+        <li class="nav-item ms-md-auto ms-0">
           <a
-            class="nav-link"
+            class="nav-link px-3"
             routerLink="/"
             routerLinkActive="bg-danger text-white rounded fw-medium"
             (click)="signOut()"
             >signout</a
           >
         </li>
+
         } @else {
-        <li class="nav-item ms-auto">
+        <li class="nav-item ms-md-auto ms-0">
           <a
-            class="nav-link"
+            class="nav-link px-3"
             routerLink="/signup"
             routerLinkActive="bg-black bg-opacity-50 text-white rounded fw-medium"
             ><i class="bi bi-person-add me-1"></i> signup</a
@@ -54,7 +58,7 @@
         </li>
         <li class="nav-item mx-1">
           <a
-            class="nav-link justify-content-end"
+            class="nav-link justify-content-end px-3"
             routerLink="/login"
             routerLinkActive="bg-black bg-opacity-50 text-white rounded fw-medium"
           >

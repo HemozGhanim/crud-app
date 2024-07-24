@@ -1,5 +1,5 @@
-<div class="d-flex align-items-center py-4 container position-relative h-full">
-  <main class="form-signin w-100 m-auto">
+<div class="d-flex align-items-center container position-relative h-full">
+  <main class="form-signin w-100 m-auto py-4">
     @if (responseError) {
     <div class="alert alert-danger text-uppercase" role="alert">
       {{ errorMessages }} !!
@@ -8,11 +8,11 @@
     <form [formGroup]="credentials" (submit)="onSubmit()">
       <div class="row d-flex justify-content-center align-items-center">
         <div class="row d-flex justify-content-center align-items-center">
-          <div class="col col-md-6">
+          <div class="col col-12 col-md-6">
             <img class="mb-4 w-75" src="ic-shape-about.svg" alt="" />
           </div>
           <div
-            class="col col-md-6 d-flex flex-wrap justify-content-center align-items-center"
+            class="col col-12 col-md-6 d-flex flex-wrap justify-content-center align-items-center"
           >
             <div class="w-75">
               <h1 class="h3 mb-3 fw-normal">Please sign in</h1>

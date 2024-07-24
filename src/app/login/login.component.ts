@@ -20,18 +20,22 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
-  loginImg: string = 'assets/ic-shape-about.svg';
-
+  //user data
   protected credentials = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
     returnSecureToken: new FormControl(true),
   });
+
+  //variables
   loadding: boolean = false;
   responseError: boolean = false;
   errorMessages: string = '';
+
   constructor(private _authService: AuthService, private _router: Router) {}
   ngOnInit(): void {}
+
+  //funciton on login
   onSubmit() {
     if (this.credentials.valid) {
       this.loadding = true;

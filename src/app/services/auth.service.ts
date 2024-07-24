@@ -7,9 +7,10 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root',
 })
 export class AuthService {
+  //variables
   JWT_token: string = '';
-  isLoggedInVar: any = '';
-  authListener = new Subject<any>();
+  baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:';
+  API_key = 'AIzaSyCzBCPpGlVjQ2JvPfgl2-EpqmcX8MIxHGU';
 
   constructor(
     private http: HttpClient,
@@ -17,9 +18,7 @@ export class AuthService {
     private cookieService: CookieService
   ) {}
 
-  baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:';
-
-  API_key = 'AIzaSyCzBCPpGlVjQ2JvPfgl2-EpqmcX8MIxHGU';
+  //call login server function
   login(data: any) {
     return this.http
       .post(`${this.baseUrl}signInWithPassword?key=${this.API_key}`, data)
@@ -35,6 +34,7 @@ export class AuthService {
       );
   }
 
+  //call signup server function
   signup(data: any) {
     console.log(data);
     return this.http
@@ -51,6 +51,7 @@ export class AuthService {
       );
   }
 
+  //function to signOut
   signOut() {
     this.cookieService.delete('authUser');
     this.cookieService.delete('localId');
@@ -58,6 +59,7 @@ export class AuthService {
     this.isLoggedIn();
   }
 
+  //function to check he is auth or not
   isLoggedIn() {
     if (this.cookieService.get('authUser')) {
       return true;

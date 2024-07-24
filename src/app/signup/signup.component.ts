@@ -17,21 +17,29 @@ import { NgIf } from '@angular/common';
   styleUrl: './signup.component.css',
 })
 export class SignupComponent {
-  //variables
+  //create user data
   protected createUserData: FormGroup<userData> = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
     returnSecureToken: new FormControl(true),
   });
-  confirmPassword = '';
+
+  //variables
   loadding: boolean = false;
+  confirmPassword: string = '';
   responseError: boolean = false;
   createdSuccess: boolean = false;
   errorMessages: string = '';
-  //methods
+
   constructor(private _authService: AuthService, private _router: Router) {}
+
+  //function to create account
+  /**
+   * @function onSubmitCreateAccount
+   * @description This function is used to create a new account for the user
+   * @returns {void}
+   */
   onSubmitCreateAccount(): void {
-    // this._authService.signup(this.createUserData.value).subscribe();
     console.log(this.createUserData.valid);
     if (this.createUserData.valid) {
       this.loadding = true;

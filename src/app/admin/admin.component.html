@@ -1,12 +1,62 @@
 <div class="container">
-  @if (uploadOrder == true) {
+  @if (editedOrder == true) {
+  <div
+    class="toast-container p-3 bottom-0 end-0"
+    id="toastPlacement"
+    data-original-class="toast-container p-3"
+  >
+    <div class="toast fade show text-bg-primary bg-opacity-50 border-0">
+      <div class="toast-body text-uppercase fw-medium">
+        order_edited_Successfully !!
+      </div>
+    </div>
+  </div>
+  } @else if (editedOrder == false) {
+  <div
+    class="toast-container p-3 bottom-0 end-0"
+    id="toastPlacement"
+    data-original-class="toast-container p-3"
+  >
+    <div class="toast fade show text-bg-primary bg-opacity-50 border-0">
+      <div class="toast-body text-uppercase fw-medium">
+        Error_in_edit_order !!
+      </div>
+    </div>
+  </div>
+  } @else { } @if (deletedOrder == true) {
+  <div
+    class="toast-container p-3 bottom-0 end-0"
+    id="toastPlacement"
+    data-original-class="toast-container p-3"
+  >
+    <div class="toast fade show text-bg-warning bg-opacity-50 border-0">
+      <div class="toast-body text-uppercase fw-medium">
+        order_Deleted_Successfully !!
+      </div>
+    </div>
+  </div>
+  } @else if (deletedOrder == false) {
+  <div
+    class="toast-container p-3 bottom-0 end-0"
+    id="toastPlacement"
+    data-original-class="toast-container p-3"
+  >
+    <div class="toast fade show text-bg-danger bg-opacity-50 border-0">
+      <div class="toast-body text-uppercase fw-medium">
+        Error_in_Delete_order !!
+      </div>
+    </div>
+  </div>
+  } @else { } @if (uploadOrder == true) {
   <div
     class="toast-container p-3 bottom-0 end-0"
     id="toastPlacement"
     data-original-class="toast-container p-3"
   >
     <div class="toast fade show text-bg-success">
-      <div class="toast-body text-uppercase">order_Added_Successfully !!</div>
+      <div class="toast-body text-uppercase fw-medium">
+        order_Added_Successfully !!
+      </div>
     </div>
   </div>
   } @else if (uploadOrder == false) {
@@ -16,10 +66,13 @@
     data-original-class="toast-container p-3"
   >
     <div class="toast fade show text-bg-danger">
-      <div class="toast-body text-uppercase">Error_in_Add_Order !!</div>
+      <div class="toast-body text-uppercase fw-medium">
+        Error_in_Add_Order !!
+      </div>
     </div>
   </div>
   } @else { }
+
   <div
     class="d-flex align-items-center flex-wrap p-3 my-4 text-white bg-purple rounded shadow-sm"
   >
@@ -40,7 +93,7 @@
         class="btn"
         [class]="uploadOrder ? 'btn-success' : 'btn-outline-light'"
       >
-        @if (loadding == true) {
+        @if (Creat_Loading == true) {
         <span
           class="spinner-border spinner-border-sm mx-1"
           aria-hidden="true"
@@ -58,7 +111,7 @@
   @if(orders.length == 0){
   <h1>Add Your Order Here</h1>
   } @else {
-
+  <!-- start group of orders -->
   <div class="list-group text-start">
     @for (order of orders; track $index) {
     <div
@@ -74,41 +127,78 @@
           height="32"
           class="rounded-circle flex-shrink-0"
         />
+        <!-- start order data -->
         <div class="d-flex w-100 align-items-center">
           <div>
             <h6 class="mb-0">{{ order.orderName }}</h6>
           </div>
         </div>
+        <!-- end order data -->
+        <!-- start edit button -->
         <button
           type="button"
           class="btn btn-warning btn-sm text-white"
-          (click)="edit = !edit"
+          (click)="EditAndPutEditedData(order, EditorderData)"
         >
-          <i class="bi bi-pencil-square"></i>
+          <i class="bi bi-pencil-square fw-bold" style="font-size: 1.2em"></i>
         </button>
-        <button type="button" class="btn btn-danger btn-sm text-white">
-          <i class="bi bi-trash-fill"></i>
+        <!-- end edit button -->
+        <!-- start delete button -->
+        <button
+          type="button"
+          class="btn btn-danger btn-sm text-white"
+          (click)="deleteOrder(order)"
+        >
+          @if (delete_Loading == true) {
+          <span
+            class="spinner-border spinner-border-sm mx-1"
+            aria-hidden="true"
+          ></span>
+          } @else {
+          <i
+            class="bi fw-bold"
+            [class]="deletedOrder ? 'bi-check2-all ' : 'bi-trash-fill'"
+            style="font-size: 1.2em"
+          ></i
+          >}
         </button>
+        <!-- end delete button -->
       </div>
-      @if(edit == true){
+      @if(order.isEditing == true){
+      <!-- start edit expand -->
       <div class="w-100 d-flex flex-nowrap gap-2 align-item-center">
         <input
           type="text"
           class="form-control"
           [(ngModel)]="EditorderData"
-          (keydown.enter)="EditOrder(EditorderData)"
+          (keydown.enter)="EditOrder(EditorderData, order)"
+          (ngModelChange)="checkInputField(EditorderData, order)"
         />
         <button
           type="button"
           class="btn btn-success btn-sm text-white"
-          (click)="EditOrder(EditorderData)"
+          (click)="EditOrder(EditorderData, order)"
+          [disabled]="disabled"
         >
-          <i class="bi bi-check2-all"></i>
+          @if (edit_Loading == true) {
+          <span
+            class="spinner-border spinner-border-sm mx-1"
+            aria-hidden="true"
+          ></span>
+          } @else {
+          <i
+            class="bi fw-bold"
+            [class]="editedOrder ? 'bi-check2-all ' : 'bi-pencil'"
+            style="font-size: 1.2em"
+          ></i
+          >}
         </button>
       </div>
+      <!-- end edit expand -->
       }
     </div>
     }
   </div>
+  <!-- end group of orders -->
   }
 </div>

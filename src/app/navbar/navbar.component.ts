@@ -12,16 +12,20 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent implements OnInit, DoCheck {
+  //variavle to check he is authenticated or not
   isLoggedin: any;
 
   constructor(private _authService: AuthService, private _router: Router) {}
 
+  //to check if he auth
   ngOnInit(): void {
     this.isLoggedin = this._authService.isLoggedIn();
   }
   ngDoCheck(): void {
     this.isLoggedin = this._authService.isLoggedIn();
   }
+
+  //function to signout
   signOut() {
     this._authService.signOut();
     this._router.navigate(['login']);
