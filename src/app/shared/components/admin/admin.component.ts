@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService } from '../services/order.service';
+import { OrderService } from '../../../core/services/order.service';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { catchError, pipe, tap } from 'rxjs';
-import { OrderData } from '../models/orders';
+import { OrderData } from '../../interfaces/orders';
 
 @Component({
   selector: 'app-admin',

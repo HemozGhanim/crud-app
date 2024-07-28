@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, Subject, tap } from 'rxjs';
 import { AuthService } from './auth.service';
 import { CookieService } from 'ngx-cookie-service';
-import { OrderData } from '../models/orders';
+import { OrderData } from '../../shared/interfaces/orders';
 
 @Injectable({
   providedIn: 'root',

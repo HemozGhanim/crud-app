@@ -1,4 +1,4 @@
-import { AuthService } from './../services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Component } from '@angular/core';
 import {
   FormControl,
@@ -6,7 +6,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { userData } from '../models/userdata';
+import { userData } from '../../interfaces/userdata';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 @Component({
