@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OrderService } from '../../../core/services/order.service';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
-import { catchError, pipe, tap } from 'rxjs';
 import { OrderData } from '../../interfaces/orders';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
@@ -11,9 +11,10 @@ import { OrderData } from '../../interfaces/orders';
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
   //new order variables
   orderData = '';
+  destroyData: Subscription | undefined;
 
   //orders from DB variables
   orders: OrderData[] = [];
@@ -21,10 +22,11 @@ export class AdminComponent implements OnInit {
   //creation variables
   uploadOrder: any = null;
   Creat_Loading: boolean = false;
-
+  createOrderError: any = null;
   //delete variables
   deletedOrder: any = null;
-  delete_Loading: boolean = false;
+  deletedOrderError: any = null;
+  delete_Loading: number | null = null;
 
   //edit variables
   EditorderData = '';
@@ -34,24 +36,58 @@ export class AdminComponent implements OnInit {
 
   //testing variables
   disabled: boolean = true;
-
+  deleting_order: any;
   constructor(private _orderService: OrderService) {
-    this.getOrders();
+    // this.getOrders();
   }
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.orders = [];
+    this.destroyData = this._orderService.getOrders().subscribe({
+      next: (data: any) => {
+        if (!data || Object.keys(data).length === 0 || data == null) {
+          this.orders = [];
+        } else {
+          this.orders = [];
+          console.log(data);
+          for (const [key, value] of Object.entries(data)) {
+            // Assign the id from the key
+            const orderWithId = {
+              ...(value as object),
+              id: key,
+            } as OrderData;
+            this.orders.unshift(orderWithId);
+          }
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        throw new Error(error);
+      },
+    });
+  }
+  ngOnDestroy(): void {
+    if (this.destroyData) {
+      this.destroyData.unsubscribe();
+    }
+  }
   //get Orders
   getOrders() {
+    this.orders = [];
     this._orderService.getOrders().subscribe({
       next: (data: any) => {
-        if (!data || Object.keys(data).length === 0) {
+        if (!data || Object.keys(data).length === 0 || data == null) {
           this.orders = [];
-          return;
-        }
-        this.orders = [];
-        for (const [key, value] of Object.entries(data)) {
-          // Assign the id from the key
-          const orderWithId = { ...(value as object), id: key } as OrderData;
-          this.orders.unshift(orderWithId);
+        } else {
+          this.orders = [];
+          console.log(data);
+          for (const [key, value] of Object.entries(data)) {
+            // Assign the id from the key
+            const orderWithId = {
+              ...(value as object),
+              id: key,
+            } as OrderData;
+            this.orders.unshift(orderWithId);
+          }
         }
       },
       error: (error) => {
@@ -64,21 +100,31 @@ export class AdminComponent implements OnInit {
   //create Orders
   createOrder() {
     this.Creat_Loading = true;
-    this._orderService.createOrder(this.orderData).subscribe({
-      next: (data) => {
-        this.Creat_Loading = false;
-        this.uploadOrder = true;
-        this.orderData = '';
-        this.getOrders();
-        setTimeout(() => {
-          this.uploadOrder = null;
-        }, 2000);
-      },
-      error: (err) => {
-        this.Creat_Loading = false;
-        this.uploadOrder = false;
-      },
-    });
+    if (
+      this.orderData == '' ||
+      this.orderData == null ||
+      this.orderData == ' '
+    ) {
+      this.createOrderError = true;
+      this.Creat_Loading = false;
+    } else {
+      this.createOrderError = false;
+      this._orderService.createOrder(this.orderData).subscribe({
+        next: (data) => {
+          this.Creat_Loading = false;
+          this.uploadOrder = true;
+          this.orderData = '';
+          this.getOrders();
+          setTimeout(() => {
+            this.uploadOrder = null;
+          }, 500);
+        },
+        error: (err) => {
+          this.Creat_Loading = false;
+          this.uploadOrder = false;
+        },
+      });
+    }
   }
 
   //edit Orders
@@ -108,22 +154,26 @@ export class AdminComponent implements OnInit {
   }
 
   //delete Orders
-  deleteOrder(order: OrderData) {
-    this.delete_Loading = true;
+  deleteOrder(order: OrderData, index: number) {
+    this.delete_Loading = index;
+    // await this.checkDeletedField(order);
     this._orderService.deleteOrder(order).subscribe({
       next: (data) => {
         this.uploadOrder = null;
-        this.delete_Loading = false;
-        this.deletedOrder = true;
-        this.getOrders();
+        this.delete_Loading = null;
+        this.deletedOrder = index;
+        this.deletedOrderError = true;
         setTimeout(() => {
           this.deletedOrder = null;
+          this.getOrders();
           this.uploadOrder = null;
-        }, 2000);
+          this.deletedOrderError = null;
+        }, 500);
       },
       error: (err) => {
-        this.delete_Loading = false;
-        this.deletedOrder = false;
+        this.delete_Loading = null;
+        this.deletedOrderError = false;
+        this.deletedOrder = null;
         console.log(err);
       },
     });
@@ -132,7 +182,6 @@ export class AdminComponent implements OnInit {
   // helpers functions
   EditAndPutEditedData(order: any, editedData?: any) {
     this.checkInputField(editedData, order);
-
     this.toggleEdit(order);
     this.putEditData(order);
   }
@@ -145,7 +194,7 @@ export class AdminComponent implements OnInit {
   checkInputField(editedData: any, order: OrderData) {
     if (editedData == order.orderName) {
       return (this.disabled = true);
-    } else if (editedData == '') {
+    } else if ((editedData || '').trim().length === 0) {
       return (this.disabled = true);
     } else {
       return (this.disabled = false);

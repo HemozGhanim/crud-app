@@ -1,4 +1,5 @@
 <div class="container">
+  <!-- error in editOrder -->
   @if (editedOrder == true) {
   <div
     class="toast-container p-3 bottom-0 end-0"
@@ -23,7 +24,9 @@
       </div>
     </div>
   </div>
-  } @else { } @if (deletedOrder == true) {
+  } @else { }
+  <!-- error in deleteOrder -->
+  @if (deletedOrderError == true) {
   <div
     class="toast-container p-3 bottom-0 end-0"
     id="toastPlacement"
@@ -35,7 +38,7 @@
       </div>
     </div>
   </div>
-  } @else if (deletedOrder == false) {
+  } @else if (deletedOrderError == false) {
   <div
     class="toast-container p-3 bottom-0 end-0"
     id="toastPlacement"
@@ -47,7 +50,9 @@
       </div>
     </div>
   </div>
-  } @else { } @if (uploadOrder == true) {
+  } @else { }
+  <!-- error in uploadOrder -->
+  @if (uploadOrder == true) {
   <div
     class="toast-container p-3 bottom-0 end-0"
     id="toastPlacement"
@@ -73,6 +78,21 @@
   </div>
   } @else { }
 
+  <!-- error in createOrder -->
+  @if (createOrderError == true) {
+  <div
+    class="toast-container p-3 bottom-0 end-0"
+    id="toastPlacement"
+    data-original-class="toast-container p-3"
+  >
+    <div class="toast fade show text-bg-danger bg-opacity-50 border-0">
+      <div class="toast-body text-uppercase fw-medium">
+        order_can_not_be_empty !!
+      </div>
+    </div>
+  </div>
+  } @else { }
+
   <div
     class="d-flex align-items-center flex-wrap p-3 my-4 text-white bg-purple rounded shadow-sm"
   >
@@ -92,6 +112,7 @@
         (click)="createOrder()"
         class="btn"
         [class]="uploadOrder ? 'btn-success' : 'btn-outline-light'"
+        [disabled]="(orderData || '').trim().length === 0"
       >
         @if (Creat_Loading == true) {
         <span
@@ -147,9 +168,9 @@
         <button
           type="button"
           class="btn btn-danger btn-sm text-white"
-          (click)="deleteOrder(order)"
+          (click)="deleteOrder(order, $index)"
         >
-          @if (delete_Loading == true) {
+          @if (delete_Loading === $index) {
           <span
             class="spinner-border spinner-border-sm mx-1"
             aria-hidden="true"
@@ -157,7 +178,9 @@
           } @else {
           <i
             class="bi fw-bold"
-            [class]="deletedOrder ? 'bi-check2-all ' : 'bi-trash-fill'"
+            [class]="
+              deletedOrder === $index ? 'bi-check2-all ' : 'bi-trash-fill'
+            "
             style="font-size: 1.2em"
           ></i
           >}

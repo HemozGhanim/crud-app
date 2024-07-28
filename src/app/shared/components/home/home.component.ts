@@ -24,7 +24,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.userData = this.cookieService.get('userEmail') || '';
-    this.userEmail = JSON.parse(this.userData);
+    this.userEmail = '';
+    if (this.userData.startsWith('"') && this.userData.endsWith('"')) {
+      this.userEmail = this.userData.slice(1, -1);
+    } else {
+      this.userEmail = this.userData;
+    }
     this.isloggedin = this.service.isLoggedIn();
   }
 }

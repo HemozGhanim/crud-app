@@ -4,7 +4,6 @@ import { catchError, Observable, Subject, tap } from 'rxjs';
 import { AuthService } from './auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { OrderData } from '../../shared/interfaces/orders';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -19,11 +18,18 @@ export class OrderService {
     private _cookieService: CookieService,
     private _AuthService: AuthService
   ) {
-    this.userLocalId = JSON.parse(this._cookieService.get('localId'));
+    let LocalId = this._cookieService.get('localId');
+    this.userLocalId = '';
+    if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
+      this.userLocalId = LocalId.slice(1, -1);
+    } else {
+      this.userLocalId = LocalId;
+    }
   }
 
   //call to get orders from database ( server ) 'using firebase realtime DB '
   getOrders() {
+    console.log(this.userLocalId);
     return this.http.get(
       `${this.baseUrl}orders/${this.userLocalId}/created.json`
     );
