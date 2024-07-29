@@ -3,6 +3,7 @@ import { OrderService } from '../../../core/services/order.service';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { OrderData } from '../../interfaces/orders';
 import { Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-admin',
@@ -12,9 +13,13 @@ import { Subscription } from 'rxjs';
   styleUrl: './admin.component.css',
 })
 export class AdminComponent implements OnInit, OnDestroy {
+  //user variables
+  userLocalId: string = '';
+
   //new order variables
   orderData = '';
   destroyData: Subscription | undefined;
+  dataLoading: boolean = false;
 
   //orders from DB variables
   orders: OrderData[] = [];
@@ -37,33 +42,47 @@ export class AdminComponent implements OnInit, OnDestroy {
   //testing variables
   disabled: boolean = true;
   deleting_order: any;
-  constructor(private _orderService: OrderService) {
-    // this.getOrders();
+  constructor(
+    private _orderService: OrderService,
+    private _cookieService: CookieService
+  ) {
+    let LocalId = this._cookieService.get('localId');
+    this.userLocalId = '';
+    if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
+      this.userLocalId = LocalId.slice(1, -1);
+    } else {
+      this.userLocalId = LocalId;
+    }
   }
   ngOnInit() {
+    // this.getOrders();
+
     this.orders = [];
-    this.destroyData = this._orderService.getOrders().subscribe({
-      next: (data: any) => {
-        if (!data || Object.keys(data).length === 0 || data == null) {
-          this.orders = [];
-        } else {
-          this.orders = [];
-          console.log(data);
-          for (const [key, value] of Object.entries(data)) {
-            // Assign the id from the key
-            const orderWithId = {
-              ...(value as object),
-              id: key,
-            } as OrderData;
-            this.orders.unshift(orderWithId);
+    this.dataLoading = true;
+    this.destroyData = this._orderService
+      .getOrders(this.userLocalId)
+      .subscribe({
+        next: (data: any) => {
+          if (!data || Object.keys(data).length === 0 || data == null) {
+            this.orders = [];
+          } else {
+            this.orders = [];
+            this.dataLoading = false;
+            for (const [key, value] of Object.entries(data)) {
+              // Assign the id from the key
+              const orderWithId = {
+                ...(value as object),
+                id: key,
+              } as OrderData;
+              this.orders.unshift(orderWithId);
+            }
           }
-        }
-      },
-      error: (error) => {
-        console.log(error);
-        throw new Error(error);
-      },
-    });
+        },
+        error: (error) => {
+          console.log(error);
+          throw new Error(error);
+        },
+      });
   }
   ngOnDestroy(): void {
     if (this.destroyData) {
@@ -73,13 +92,14 @@ export class AdminComponent implements OnInit, OnDestroy {
   //get Orders
   getOrders() {
     this.orders = [];
-    this._orderService.getOrders().subscribe({
+    this.dataLoading = true;
+    this._orderService.getOrders(this.userLocalId).subscribe({
       next: (data: any) => {
         if (!data || Object.keys(data).length === 0 || data == null) {
           this.orders = [];
         } else {
           this.orders = [];
-          console.log(data);
+          this.dataLoading = false;
           for (const [key, value] of Object.entries(data)) {
             // Assign the id from the key
             const orderWithId = {
@@ -109,21 +129,23 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.Creat_Loading = false;
     } else {
       this.createOrderError = false;
-      this._orderService.createOrder(this.orderData).subscribe({
-        next: (data) => {
-          this.Creat_Loading = false;
-          this.uploadOrder = true;
-          this.orderData = '';
-          this.getOrders();
-          setTimeout(() => {
-            this.uploadOrder = null;
-          }, 500);
-        },
-        error: (err) => {
-          this.Creat_Loading = false;
-          this.uploadOrder = false;
-        },
-      });
+      this._orderService
+        .createOrder(this.orderData, this.userLocalId)
+        .subscribe({
+          next: (data) => {
+            this.Creat_Loading = false;
+            this.uploadOrder = true;
+            this.orderData = '';
+            this.getOrders();
+            setTimeout(() => {
+              this.uploadOrder = null;
+            }, 500);
+          },
+          error: (err) => {
+            this.Creat_Loading = false;
+            this.uploadOrder = false;
+          },
+        });
     }
   }
 

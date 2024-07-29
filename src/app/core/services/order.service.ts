@@ -28,17 +28,16 @@ export class OrderService {
   }
 
   //call to get orders from database ( server ) 'using firebase realtime DB '
-  getOrders() {
-    console.log(this.userLocalId);
+  getOrders(userId: string) {
     return this.http.get(
-      `${this.baseUrl}orders/${this.userLocalId}/created.json`
+      `${this.baseUrl}orders/${userId}/created.json`
     );
   }
 
   //call to create order and push to database ( server ) 'using firebase realtime DB '
-  createOrder(order: any): Observable<any> {
+  createOrder(order: any, userId: string): Observable<any> {
     return this.http.post(
-      `${this.baseUrl}orders/${this.userLocalId}/created.json`,
+      `${this.baseUrl}orders/${userId}/created.json`,
       {
         orderName: order,
         isEditing: false,
