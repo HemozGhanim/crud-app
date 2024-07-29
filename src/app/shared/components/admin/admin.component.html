@@ -25,6 +25,7 @@
     </div>
   </div>
   } @else { }
+
   <!-- error in deleteOrder -->
   @if (deletedOrderError == true) {
   <div
@@ -51,6 +52,7 @@
     </div>
   </div>
   } @else { }
+
   <!-- error in uploadOrder -->
   @if (uploadOrder == true) {
   <div
@@ -92,6 +94,7 @@
     </div>
   </div>
   } @else { }
+
   <!-- if the order is already exist -->
   @if (orderNameExist == true) {
   <div
@@ -143,10 +146,6 @@
       </button>
     </div>
   </div>
-  @if(orders.length == 0 ){
-  <h1>Add Your Order Here</h1>
-  } @else {
-  <!-- start group of orders -->
   @if(dataLoading == true){
   <div class="card">
     <div class="card-body">
@@ -162,7 +161,10 @@
       </p>
     </div>
   </div>
+  } @else { @if(orders.length == 0){
+  <h1>Add Your Order Here</h1>
   } @else {
+  <!-- start group of orders -->
   <div class="list-group text-start">
     @for (order of orders; track $index) {
     <div
@@ -252,8 +254,6 @@
     </div>
     }
   </div>
-  }
-
   <!-- end group of orders -->
-  }
+  } }
 </div>

@@ -9,14 +9,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { userData } from '../../interfaces/userdata';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgIf],
+  imports: [FormsModule, ReactiveFormsModule, RouterModule, NgIf],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
 })

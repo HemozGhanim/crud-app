@@ -65,6 +65,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         next: (data: any) => {
           if (!data || Object.keys(data).length === 0 || data == null) {
             this.orders = [];
+            this.dataLoading = false;
           } else {
             this.orders = [];
             this.dataLoading = false;
@@ -132,6 +133,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       let orderIsExist = this.orders.some((el) => {
         return el.orderName === this.orderData;
       });
+      console.log(orderIsExist);
       if (orderIsExist == true) {
         this.orderNameExist = true;
         this.Creat_Loading = false;
