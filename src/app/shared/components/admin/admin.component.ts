@@ -147,7 +147,7 @@ export class AdminComponent implements OnInit, OnDestroy {
             next: (data) => {
               this.Creat_Loading = false;
               this.uploadOrder = true;
-              this.orders.push({
+              this.orders.unshift({
                 orderName: this.orderData,
                 isEditing: false,
                 isDone: false,
