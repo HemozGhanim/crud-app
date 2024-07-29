@@ -8,22 +8,15 @@ import {
   Router,
 } from '@angular/router';
 
-import { AuthService } from '../../core/services/auth.service';
-
 @Injectable({
   providedIn: 'root',
 })
-export class authGuard implements CanActivate {
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private cookieService: CookieService
-  ) {}
+export class isLoggedGuard implements CanActivate {
+  constructor(private router: Router, private cookieService: CookieService) {}
   isLoggedIn() {
     if (this.cookieService.get('authUser')) {
       return true;
     }
-
     return false;
   }
   canActivate(
@@ -32,9 +25,9 @@ export class authGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean {
     if (this.isLoggedIn()) {
-      return true;
+      this.router.navigate(['/']);
+      return false;
     }
-    this.router.navigate(['/login']);
-    return false;
+    return true;
   }
 }

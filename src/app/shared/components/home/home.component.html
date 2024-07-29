@@ -1,6 +1,30 @@
-<h1>Home Page</h1>
+<!-- <h1>Home Page</h1> -->
 @if (isloggedin == true) {
-<p>welcome Mr: {{ userEmail }}</p>
+<!-- <p>welcome Mr: {{ userEmail }}</p> -->
+<div
+  class="d-flex h-full text-center justify-content-center align-items-center"
+>
+  <div
+    class="card py-5 rounded-5 cover-container d-flex w-100 p-3 mx-auto flex-column bg-dark text-white"
+  >
+    <main class="px-3">
+      <h3>hello....</h3>
+      <h2>Mr: {{ userEmail }}</h2>
+      <p class="lead text-capitalize fw-medium">
+        your orders Quantity: {{ ordersQuantity }}
+      </p>
+      <p class="lead">
+        <button
+          [routerLink]="['/orders']"
+          routerLinkActive="router-link-active"
+          class="btn btn-lg btn-primary fw-bold text-capitalize"
+        >
+          Add more Orders <i class="bi bi-plus-lg ms-1"></i>
+        </button>
+      </p>
+    </main>
+  </div>
+</div>
 
 }@else {
 <p class="lead">

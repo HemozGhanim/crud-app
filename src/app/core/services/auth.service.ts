@@ -34,9 +34,6 @@ export class AuthService {
 
   //function to signOut
   signOut() {
-    // this.cookieService.delete('authUser');
-    // this.cookieService.delete('localId');
-    // this.cookieService.delete('userEmail');
     this.cookieService.deleteAll();
     this.isLoggedIn();
   }
