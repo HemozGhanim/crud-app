@@ -32,9 +32,13 @@ export class HomeComponent implements OnInit {
     } else {
       this.userId = LocalId;
     }
-    this._orderService
-      .getOrders(this.userId)
-      .subscribe((data) => (this.ordersQuantity = Object.keys(data).length));
+    this._orderService.getOrders(this.userId).subscribe((data: any) => {
+      if (data != null || data != undefined) {
+        this.ordersQuantity = Object.keys(data || {}).length;
+      } else {
+        this.ordersQuantity = 0;
+      }
+    });
   }
 
   ngOnInit(): void {

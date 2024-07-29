@@ -28,6 +28,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   uploadOrder: any = null;
   Creat_Loading: boolean = false;
   createOrderError: any = null;
+  orderNameExist: any = null;
+
   //delete variables
   deletedOrder: any = null;
   deletedOrderError: any = null;
@@ -55,8 +57,6 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit() {
-    // this.getOrders();
-
     this.orders = [];
     this.dataLoading = true;
     this.destroyData = this._orderService
@@ -90,32 +90,33 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
   }
   //get Orders
-  getOrders() {
-    this.orders = [];
-    this.dataLoading = true;
-    this._orderService.getOrders(this.userLocalId).subscribe({
-      next: (data: any) => {
-        if (!data || Object.keys(data).length === 0 || data == null) {
-          this.orders = [];
-        } else {
-          this.orders = [];
-          this.dataLoading = false;
-          for (const [key, value] of Object.entries(data)) {
-            // Assign the id from the key
-            const orderWithId = {
-              ...(value as object),
-              id: key,
-            } as OrderData;
-            this.orders.unshift(orderWithId);
-          }
-        }
-      },
-      error: (error) => {
-        console.log(error);
-        throw new Error(error);
-      },
-    });
-  }
+  // getOrders() {
+  //   this.orders = [];
+  //   this.dataLoading = true;
+  //   this._orderService.getOrders(this.userLocalId).subscribe({
+  //     next: (data: any) => {
+  //       if (!data || Object.keys(data || {}).length === 0 || data == null) {
+  //         this.dataLoading = false;
+  //         this.orders = [];
+  //       } else {
+  //         this.orders = [];
+  //         this.dataLoading = false;
+  //         for (const [key, value] of Object.entries(data)) {
+  //           // Assign the id from the key
+  //           const orderWithId = {
+  //             ...(value as object),
+  //             id: key,
+  //           } as OrderData;
+  //           this.orders.unshift(orderWithId);
+  //         }
+  //       }
+  //     },
+  //     error: (error) => {
+  //       console.log(error);
+  //       throw new Error(error);
+  //     },
+  //   });
+  // }
 
   //create Orders
   createOrder() {
@@ -123,35 +124,52 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (
       this.orderData == '' ||
       this.orderData == null ||
-      this.orderData == ' '
+      (this.orderData || '').trim().length === 0
     ) {
       this.createOrderError = true;
       this.Creat_Loading = false;
     } else {
-      this.createOrderError = false;
-      this._orderService
-        .createOrder(this.orderData, this.userLocalId)
-        .subscribe({
-          next: (data) => {
-            this.Creat_Loading = false;
-            this.uploadOrder = true;
-            this.orderData = '';
-            this.getOrders();
-            setTimeout(() => {
-              this.uploadOrder = null;
-            }, 500);
-          },
-          error: (err) => {
-            this.Creat_Loading = false;
-            this.uploadOrder = false;
-          },
-        });
+      let orderIsExist = this.orders.some((el) => {
+        return el.orderName === this.orderData;
+      });
+      if (orderIsExist == true) {
+        this.orderNameExist = true;
+        this.Creat_Loading = false;
+        setTimeout(() => {
+          this.orderNameExist = null;
+        }, 1000);
+      } else {
+        this.orderNameExist = false;
+        this.createOrderError = false;
+        this._orderService
+          .createOrder(this.orderData, this.userLocalId)
+          .subscribe({
+            next: (data) => {
+              this.Creat_Loading = false;
+              this.uploadOrder = true;
+              this.orders.push({
+                orderName: this.orderData,
+                isEditing: false,
+                isDone: false,
+              });
+              console.log(this.orders);
+              this.orderData = '';
+              setTimeout(() => {
+                this.uploadOrder = null;
+              }, 500);
+            },
+            error: (err) => {
+              this.Creat_Loading = false;
+              this.uploadOrder = false;
+            },
+          });
+      }
     }
   }
 
   //edit Orders
 
-  EditOrder(editedData: any, order: OrderData) {
+  EditOrder(editedData: any, order: OrderData, index: number) {
     this.checkInputField(editedData, order);
     this.edit_Loading = true;
     this._orderService.editOrder(editedData, order).subscribe({
@@ -162,7 +180,12 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.edit_Loading = false;
         this.editedOrder = true;
         this.toggleEdit(order);
-        this.getOrders();
+        this.orders.splice(index, 1);
+        this.orders.unshift({
+          orderName: editedData,
+          isEditing: false,
+          isDone: false,
+        });
         setTimeout(() => {
           this.editedOrder = null;
         }, 2000);
@@ -187,7 +210,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.deletedOrderError = true;
         setTimeout(() => {
           this.deletedOrder = null;
-          this.getOrders();
+          this.orders.splice(index, 1);
           this.uploadOrder = null;
           this.deletedOrderError = null;
         }, 500);

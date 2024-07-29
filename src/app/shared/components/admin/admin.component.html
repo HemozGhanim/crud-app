@@ -6,7 +6,7 @@
     id="toastPlacement"
     data-original-class="toast-container p-3"
   >
-    <div class="toast fade show text-bg-primary bg-opacity-50 border-0">
+    <div class="toast fade show text-bg-primary bg-opacity-75 border-0">
       <div class="toast-body text-uppercase fw-medium">
         order_edited_Successfully !!
       </div>
@@ -18,7 +18,7 @@
     id="toastPlacement"
     data-original-class="toast-container p-3"
   >
-    <div class="toast fade show text-bg-primary bg-opacity-50 border-0">
+    <div class="toast fade show text-bg-primary bg-opacity-75 border-0">
       <div class="toast-body text-uppercase fw-medium">
         Error_in_edit_order !!
       </div>
@@ -32,7 +32,7 @@
     id="toastPlacement"
     data-original-class="toast-container p-3"
   >
-    <div class="toast fade show text-bg-warning bg-opacity-50 border-0">
+    <div class="toast fade show text-bg-warning bg-opacity-75 border-0">
       <div class="toast-body text-uppercase fw-medium">
         order_Deleted_Successfully !!
       </div>
@@ -44,7 +44,7 @@
     id="toastPlacement"
     data-original-class="toast-container p-3"
   >
-    <div class="toast fade show text-bg-danger bg-opacity-50 border-0">
+    <div class="toast fade show text-bg-danger bg-opacity-75 border-0">
       <div class="toast-body text-uppercase fw-medium">
         Error_in_Delete_order !!
       </div>
@@ -85,9 +85,23 @@
     id="toastPlacement"
     data-original-class="toast-container p-3"
   >
-    <div class="toast fade show text-bg-danger bg-opacity-50 border-0">
+    <div class="toast fade show text-bg-danger bg-opacity-75 border-0">
       <div class="toast-body text-uppercase fw-medium">
         order_can_not_be_empty !!
+      </div>
+    </div>
+  </div>
+  } @else { }
+  <!-- if the order is already exist -->
+  @if (orderNameExist == true) {
+  <div
+    class="toast-container p-3 bottom-0 end-0"
+    id="toastPlacement"
+    data-original-class="toast-container p-3"
+  >
+    <div class="toast fade show text-bg-danger bg-opacity-75 border-0">
+      <div class="toast-body text-uppercase fw-medium">
+        order_already_exist !!
       </div>
     </div>
   </div>
@@ -129,7 +143,7 @@
       </button>
     </div>
   </div>
-  @if(orders.length == 0 && dataLoading == false){
+  @if(orders.length == 0 ){
   <h1>Add Your Order Here</h1>
   } @else {
   <!-- start group of orders -->
@@ -210,13 +224,13 @@
           type="text"
           class="form-control"
           [(ngModel)]="EditorderData"
-          (keydown.enter)="EditOrder(EditorderData, order)"
+          (keydown.enter)="EditOrder(EditorderData, order, $index)"
           (ngModelChange)="checkInputField(EditorderData, order)"
         />
         <button
           type="button"
           class="btn btn-success btn-sm text-white"
-          (click)="EditOrder(EditorderData, order)"
+          (click)="EditOrder(EditorderData, order, $index)"
           [disabled]="disabled"
         >
           @if (edit_Loading == true) {
