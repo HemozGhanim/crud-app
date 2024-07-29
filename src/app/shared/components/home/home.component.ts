@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   userData: any;
   router = inject(Router);
   userId: string = '';
-  ordersQuantity: any;
+  ordersQuantity: number = 0;
 
   constructor(
     private _authService: AuthService,
