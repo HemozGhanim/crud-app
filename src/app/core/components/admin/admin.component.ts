@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OrderService } from '../../../core/services/order.service';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
-import { OrderData } from '../../interfaces/orders';
+import { OrderData } from '../../../shared/interfaces/orders';
 import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -57,6 +57,15 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit() {
+    this.getOrders();
+  }
+  ngOnDestroy(): void {
+    if (this.destroyData) {
+      this.destroyData.unsubscribe();
+    }
+  }
+  //get Orders
+  getOrders() {
     this.orders = [];
     this.dataLoading = true;
     this.destroyData = this._orderService
@@ -85,39 +94,6 @@ export class AdminComponent implements OnInit, OnDestroy {
         },
       });
   }
-  ngOnDestroy(): void {
-    if (this.destroyData) {
-      this.destroyData.unsubscribe();
-    }
-  }
-  //get Orders
-  // getOrders() {
-  //   this.orders = [];
-  //   this.dataLoading = true;
-  //   this._orderService.getOrders(this.userLocalId).subscribe({
-  //     next: (data: any) => {
-  //       if (!data || Object.keys(data || {}).length === 0 || data == null) {
-  //         this.dataLoading = false;
-  //         this.orders = [];
-  //       } else {
-  //         this.orders = [];
-  //         this.dataLoading = false;
-  //         for (const [key, value] of Object.entries(data)) {
-  //           // Assign the id from the key
-  //           const orderWithId = {
-  //             ...(value as object),
-  //             id: key,
-  //           } as OrderData;
-  //           this.orders.unshift(orderWithId);
-  //         }
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.log(error);
-  //       throw new Error(error);
-  //     },
-  //   });
-  // }
 
   //create Orders
   createOrder() {
@@ -171,18 +147,18 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   //edit Orders
 
-  EditOrder(editedData: any, order: OrderData, index: number) {
+  EditOrder(editedData: any, order: OrderData, _index: number) {
     this.checkInputField(editedData, order);
     this.edit_Loading = true;
     this._orderService.editOrder(editedData, order).subscribe({
       next: (data) => {
-        this.orders.map((el) => {
-          el.id == order.id ? (el.orderName = editedData) : null;
+        this.orders.map((el, index) => {
+          index == _index ? (el.orderName = editedData) : null;
         });
         this.edit_Loading = false;
         this.editedOrder = true;
         this.toggleEdit(order);
-        this.orders.splice(index, 1);
+        this.orders.splice(_index, 1);
         this.orders.unshift({
           orderName: editedData,
           isEditing: false,

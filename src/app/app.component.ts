@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { NavbarComponent } from './core/components/navbar/navbar.component';
 @Component({
   selector: 'app-root',
   standalone: true,

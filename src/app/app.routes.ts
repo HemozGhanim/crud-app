@@ -10,7 +10,7 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () =>
-      import('./shared/components/home/home.component').then(
+      import('./core/components/home/home.component').then(
         (c) => c.HomeComponent
       ),
     canActivate: [authGuard],
@@ -18,7 +18,7 @@ export const routes: Routes = [
   {
     path: 'orders',
     loadComponent: () =>
-      import('./shared/components/admin/admin.component').then(
+      import('./core/components/admin/admin.component').then(
         (c) => c.AdminComponent
       ),
     canActivate: [authGuard],
@@ -26,7 +26,7 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
-      import('./shared/components/login/login.component').then(
+      import('./core/components/login/login.component').then(
         (c) => c.LoginComponent
       ),
     canActivate: [isLoggedGuard],
@@ -34,7 +34,7 @@ export const routes: Routes = [
   {
     path: 'signup',
     loadComponent: () =>
-      import('./shared/components/signup/signup.component').then(
+      import('./core/components/signup/signup.component').then(
         (c) => c.SignupComponent
       ),
     canActivate: [isLoggedGuard],
@@ -42,7 +42,7 @@ export const routes: Routes = [
   {
     path: '**',
     loadComponent: () =>
-      import('./shared/components/not-found/not-found.component').then(
+      import('./core/components/not-found/not-found.component').then(
         (c) => c.NotFoundComponent
       ),
   },

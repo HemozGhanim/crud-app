@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { userData } from '../../interfaces/userdata';
+import { userData } from '../../../shared/interfaces/userdata';
 import { Router, RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
