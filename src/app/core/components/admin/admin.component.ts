@@ -123,9 +123,11 @@ export class AdminComponent implements OnInit, OnDestroy {
           .createOrder(this.orderData, this.userLocalId)
           .subscribe({
             next: (data) => {
+              console.log(data);
               this.Creat_Loading = false;
               this.uploadOrder = true;
               this.orders.unshift({
+                id: data.name,
                 orderName: this.orderData,
                 isEditing: false,
                 isDone: false,
