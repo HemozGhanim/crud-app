@@ -103,8 +103,8 @@
               type="submit"
               class="btn btn-primary mt-3 px-5 mb-4"
               [disabled]="
-                !createUserData.valid &&
-                confirmPassword.value === password?.value
+                !createUserData.valid ||
+                !(confirmPassword.value == password?.value)
               "
             >
               @if (loadding == true) {
