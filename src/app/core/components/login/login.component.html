@@ -23,9 +23,26 @@
                   formControlName="email"
                   class="form-control"
                   id="floatingInput"
+                  email
                   placeholder="name@example.com"
                 />
                 <label for="floatingInput">Email address</label>
+
+                @if(email?.invalid && (email?.dirty || email?.touched)){
+
+                <!-- required Email -->
+                @if( email?.hasError('required')){
+                <p class="text-start ps-2 text-danger">
+                  * Please enter your email address.
+                </p>
+                }
+                <!-- invalid Email -->
+
+                @if(email?.errors?.['email'] || email?.errors?.['pattern']){
+                <p class="text-start ps-2 text-danger">
+                  * Please enter a valid email address.
+                </p>
+                } }
               </div>
               <div class="form-floating">
                 <input
@@ -36,6 +53,20 @@
                   placeholder="Password"
                 />
                 <label for="floatingPassword">Password</label>
+                @if(password?.invalid && (password?.dirty ||
+                password?.touched)){
+                <!-- empty password -->
+                @if( password?.hasError('required')){
+                <p class="text-start ps-2 text-danger">
+                  * Please enter your password.
+                </p>
+                }
+                <!-- invalid password -->
+                @if(password?.hasError('minlength')){
+                <p class="text-start ps-2 text-danger">
+                  * password must be 6 charachters or more.
+                </p>
+                } }
               </div>
 
               <div class="form-check text-start my-3">
@@ -62,12 +93,14 @@
                 <span role="status">Loading...</span>
                 } @else { Login }
               </button>
-              <a
-                class="link-offset-2 link-underline link-underline-opacity-25 d-block text-capitalize"
-                [routerLink]="['/signup']"
-                routerLinkActive="router-link-active"
-                >i'am new here !</a
-              >
+              <div class="d-block">
+                <a
+                  class="link-offset-2 link-underline link-underline-opacity-25 d-inline text-capitalize"
+                  [routerLink]="['/signup']"
+                  routerLinkActive="router-link-active"
+                  >i'am new here !</a
+                >
+              </div>
             </div>
           </div>
         </div>

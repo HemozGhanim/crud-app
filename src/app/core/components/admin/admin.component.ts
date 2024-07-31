@@ -55,9 +55,10 @@ export class AdminComponent implements OnInit, OnDestroy {
     } else {
       this.userLocalId = LocalId;
     }
+  }
+  ngOnInit() {
     this.getOrders();
   }
-  ngOnInit() {}
   ngOnDestroy(): void {
     if (this.destroyData) {
       this.destroyData.unsubscribe();

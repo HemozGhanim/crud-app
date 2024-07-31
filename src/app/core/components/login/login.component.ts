@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { NgOptimizedImage } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
-
 import {
   FormsModule,
   FormControl,
@@ -24,8 +23,17 @@ import { Router, RouterModule } from '@angular/router';
 export class LoginComponent implements OnInit {
   //user data
   protected credentials = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      Validators.pattern(
+        /^[a-zA-Z][a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]*@[a-zA-Z][a-zA-Z0-9-]*\.[a-zA-Z]{2,}$/
+      ),
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
     returnSecureToken: new FormControl(true),
   });
 
@@ -42,8 +50,14 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   //funciton on login
-
+  get email() {
+    return this.credentials.get('email');
+  }
+  get password() {
+    return this.credentials.get('password');
+  }
   onSubmit() {
+    console.log(this.credentials.valid);
     if (this.credentials.valid) {
       this.loadding = true;
       this._authService.login(this.credentials.value).subscribe({

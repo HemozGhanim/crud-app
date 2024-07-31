@@ -2,6 +2,7 @@ import { OrderService } from '../../../core/services/order.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Component } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
@@ -23,14 +24,28 @@ import { CookieService } from 'ngx-cookie-service';
 export class SignupComponent {
   //create user data
   protected createUserData: FormGroup<userData> = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      Validators.pattern(
+        /^[a-zA-Z][a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]*@[a-zA-Z][a-zA-Z0-9-]*\.[a-zA-Z]{2,}$/
+      ),
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
     returnSecureToken: new FormControl(true),
   });
+  //confirm password
+  protected confirmPassword = new FormControl<string>('', [
+    Validators.required,
+    Validators.minLength(6),
+  ]);
 
   //variables
   loadding: boolean = false;
-  confirmPassword: string = '';
+  // confirmPassword: string = '';
   responseError: boolean = false;
   createdSuccess: boolean = false;
   errorMessages: string = '';
@@ -49,6 +64,14 @@ export class SignupComponent {
     } else {
       this.userLocalId = LocalId;
     }
+  }
+
+  get email() {
+    return this.createUserData.get('email');
+  }
+
+  get password() {
+    return this.createUserData.get('password');
   }
 
   //function to create account
@@ -83,6 +106,21 @@ export class SignupComponent {
           this.errorMessages = error.error.error.message;
         },
       });
+    }
+  }
+
+  checkControlValidation(
+    controller: any,
+    controllerValue: boolean | undefined
+  ) {
+    if (controllerValue) {
+      return 'is-valid';
+    } else {
+      if (controller.value == '') {
+        return '';
+      } else {
+        return 'is-invalid';
+      }
     }
   }
 }

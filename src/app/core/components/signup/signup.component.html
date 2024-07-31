@@ -26,36 +26,86 @@
                 type="email"
                 formControlName="email"
                 class="form-control"
+                [class]="checkControlValidation(email, email?.valid)"
                 id="floatingInput"
                 placeholder="name@example.com"
               />
               <label for="floatingInput">Email address</label>
+              @if(email?.invalid && (email?.dirty || email?.touched)){
+
+              <!-- required Email -->
+              @if( email?.hasError('required')){
+              <p class="text-start ps-2 invalid-feedback">
+                * Please enter your email address.
+              </p>
+              }
+              <!-- invalid Email -->
+
+              @if(email?.errors?.['email'] || email?.errors?.['pattern']){
+              <p class="text-start ps-2 invalid-feedback">
+                * Please enter a valid email address.
+              </p>
+              } }
             </div>
             <div class="form-floating my-2 w-100">
               <input
                 type="password"
                 formControlName="password"
                 class="form-control"
+                [class]="checkControlValidation(password, password?.valid)"
                 id="floatingPassword"
                 placeholder="Password"
               />
               <label for="floatingPassword">Password</label>
+              @if(password?.invalid && (password?.dirty || password?.touched)){
+              <!-- empty password -->
+              @if( password?.hasError('required')){
+              <p class="text-start ps-2 invalid-feedback">
+                * Please enter your password.
+              </p>
+              }
+              <!-- invalid password -->
+              @if(password?.hasError('minlength')){
+              <p class="text-start ps-2 invalid-feedback">
+                * password must be 6 charachters or more.
+              </p>
+              } }
             </div>
             <div class="form-floating my-2 w-100">
               <input
                 type="password"
-                [(ngModel)]="confirmPassword"
-                [ngModelOptions]="{ standalone: true }"
+                [formControl]="confirmPassword"
                 class="form-control"
+                [class]="
+                  checkControlValidation(confirmPassword, confirmPassword.valid)
+                "
                 id="floatingPassword1"
                 placeholder="Re-enter Password"
               />
               <label for="floatingPassword1">Re-enter Password</label>
+
+              @if(confirmPassword.invalid && (confirmPassword.dirty ||
+              confirmPassword.touched)){
+              <!-- empty field -->
+              @if( confirmPassword.hasError('required')){
+              <p class="text-start ps-2 invalid-feedback">
+                * Please enter your password.
+              </p>
+              }
+              <!-- invaled confirmed password -->
+              @if(confirmPassword.value != password?.value ){
+              <p class="text-start ps-2 invalid-feedback">
+                * password not Match.
+              </p>
+              } }
             </div>
             <button
               type="submit"
               class="btn btn-primary mt-3 px-5 mb-4"
-              [disabled]="!createUserData.valid"
+              [disabled]="
+                !createUserData.valid &&
+                confirmPassword.value === password?.value
+              "
             >
               @if (loadding == true) {
               <span
@@ -65,12 +115,14 @@
               <span role="status">Loading...</span>
               } @else { sign-up }
             </button>
-            <a
-              class="link-offset-2 link-underline link-underline-opacity-25 d-block text-capitalize"
-              [routerLink]="['/login']"
-              routerLinkActive="router-link-active"
-              >i already have account</a
-            >
+            <div class="d-block">
+              <a
+                class="link-offset-2 link-underline link-underline-opacity-25 d-inline text-capitalize"
+                [routerLink]="['/login']"
+                routerLinkActive="router-link-active"
+                >i already have account</a
+              >
+            </div>
           </div>
         </div>
       </div>
