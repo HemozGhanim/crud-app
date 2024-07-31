@@ -55,10 +55,9 @@ export class AdminComponent implements OnInit, OnDestroy {
     } else {
       this.userLocalId = LocalId;
     }
-  }
-  ngOnInit() {
     this.getOrders();
   }
+  ngOnInit() {}
   ngOnDestroy(): void {
     if (this.destroyData) {
       this.destroyData.unsubscribe();
@@ -66,7 +65,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
   //get Orders
   getOrders() {
-    this.orders = [];
+    // this.orders = [];
     this.dataLoading = true;
     this.destroyData = this._orderService
       .getOrders(this.userLocalId)
@@ -76,7 +75,6 @@ export class AdminComponent implements OnInit, OnDestroy {
             this.orders = [];
             this.dataLoading = false;
           } else {
-            this.orders = [];
             this.dataLoading = false;
             for (const [key, value] of Object.entries(data)) {
               // Assign the id from the key
@@ -84,9 +82,9 @@ export class AdminComponent implements OnInit, OnDestroy {
                 ...(value as object),
                 id: key,
               } as OrderData;
+
               this.orders.unshift(orderWithId);
             }
-            console.log(this.orders);
           }
         },
         error: (error) => {
@@ -123,17 +121,14 @@ export class AdminComponent implements OnInit, OnDestroy {
           .createOrder(this.orderData, this.userLocalId)
           .subscribe({
             next: (data) => {
-              console.log(this.orders);
               this.Creat_Loading = false;
               this.uploadOrder = true;
-              // this.orders.unshift({
-              //   id: data.name,
-              //   orderName: this.orderData,
-              //   isEditing: false,
-              //   isDone: false,
-              // });
-              this.getOrders();
-              console.log(this.orders);
+              this.orders.unshift({
+                id: data.name,
+                orderName: this.orderData,
+                isEditing: false,
+                isDone: false,
+              });
               this.orderData = '';
               setTimeout(() => {
                 this.uploadOrder = null;
@@ -163,6 +158,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.toggleEdit(order);
         this.orders.splice(_index, 1);
         this.orders.unshift({
+          id: order.id,
           orderName: editedData,
           isEditing: false,
           isDone: false,
@@ -182,7 +178,6 @@ export class AdminComponent implements OnInit, OnDestroy {
   //delete Orders
   deleteOrder(order: OrderData, index: number) {
     this.delete_Loading = index;
-    // await this.checkDeletedField(order);
     this._orderService.deleteOrder(order).subscribe({
       next: (data) => {
         this.uploadOrder = null;
