@@ -86,6 +86,7 @@ export class AdminComponent implements OnInit, OnDestroy {
               } as OrderData;
               this.orders.unshift(orderWithId);
             }
+            console.log(this.orders);
           }
         },
         error: (error) => {
@@ -109,7 +110,6 @@ export class AdminComponent implements OnInit, OnDestroy {
       let orderIsExist = this.orders.some((el) => {
         return el.orderName === this.orderData;
       });
-      console.log(orderIsExist);
       if (orderIsExist == true) {
         this.orderNameExist = true;
         this.Creat_Loading = false;
@@ -123,15 +123,16 @@ export class AdminComponent implements OnInit, OnDestroy {
           .createOrder(this.orderData, this.userLocalId)
           .subscribe({
             next: (data) => {
-              console.log(data);
+              console.log(this.orders);
               this.Creat_Loading = false;
               this.uploadOrder = true;
-              this.orders.unshift({
-                id: data.name,
-                orderName: this.orderData,
-                isEditing: false,
-                isDone: false,
-              });
+              // this.orders.unshift({
+              //   id: data.name,
+              //   orderName: this.orderData,
+              //   isEditing: false,
+              //   isDone: false,
+              // });
+              this.getOrders();
               console.log(this.orders);
               this.orderData = '';
               setTimeout(() => {
