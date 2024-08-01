@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AuthService } from './../../core/services/auth.service';
 
 import {
   CanActivate,
@@ -11,21 +12,18 @@ import {
   providedIn: 'root',
 })
 export class isLoggedGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private _authService: AuthService) {}
 
   authUser: string | null = '';
+  // get localData() {
+  //   return localStorage.getItem('authUser');
+  // }
 
-  isLoggedIn() {
-    if (window.localStorage.getItem('authUser')) {
-      return true;
-    }
-    return false;
-  }
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    if (this.isLoggedIn()) {
+    if (this._authService.isLoggedIn()) {
       this.router.navigate(['/']);
       return false;
     }

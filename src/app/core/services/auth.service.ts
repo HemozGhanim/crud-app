@@ -7,10 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-  ) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   //variables
   JWT_token: string = '';
@@ -32,13 +29,20 @@ export class AuthService {
 
   //function to signOut
   signOut() {
-    window.localStorage.clear();
+    window?.localStorage.clear();
     this.isLoggedIn();
   }
 
   //function to check he is auth or not
+  
+  get localData() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.localStorage.getItem('authUser');
+    }
+    return null;
+  }
   isLoggedIn() {
-    if (window.localStorage.getItem('authUser')) {
+    if (this.localData) {
       return true;
     }
     return false;
