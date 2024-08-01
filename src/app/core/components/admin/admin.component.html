@@ -27,7 +27,7 @@
   } @else { }
 
   <!-- error in deleteOrder -->
-  @if (deletedOrderError == true) {
+  @if (deletedOrderMessage == true) {
   <div
     class="toast-container p-3 bottom-0 end-0"
     id="toastPlacement"
@@ -39,7 +39,7 @@
       </div>
     </div>
   </div>
-  } @else if (deletedOrderError == false) {
+  } @else if (deletedOrderMessage == false) {
   <div
     class="toast-container p-3 bottom-0 end-0"
     id="toastPlacement"
@@ -201,6 +201,7 @@
           type="button"
           class="btn btn-danger btn-sm text-white"
           (click)="deleteOrder(order, $index)"
+          [disabled]="delete_button_can_click"
         >
           @if (delete_Loading === $index) {
           <span

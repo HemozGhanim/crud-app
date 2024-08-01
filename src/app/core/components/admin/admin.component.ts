@@ -32,9 +32,9 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   //delete variables
   deletedOrder: any = null;
-  deletedOrderError: any = null;
+  deletedOrderMessage: any = null;
   delete_Loading: number | null = null;
-
+  delete_button_can_click: boolean = false;
   //edit variables
   EditorderData = '';
   edit: boolean = false;
@@ -107,7 +107,13 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.Creat_Loading = false;
     } else {
       let orderIsExist = this.orders.some((el) => {
-        return el.orderName === this.orderData;
+        // console.log(el.orderName);
+        // console.log(this.orderData);
+        // el.orderName.trim();
+        // this.orderData.trim();
+        // console.log(el.orderName);
+        console.log(this.orderData.trim());
+        return el.orderName.trim() === this.orderData.trim();
       });
       if (orderIsExist == true) {
         this.orderNameExist = true;
@@ -179,22 +185,25 @@ export class AdminComponent implements OnInit, OnDestroy {
   //delete Orders
   deleteOrder(order: OrderData, index: number) {
     this.delete_Loading = index;
+    this.delete_button_can_click = true;
     this._orderService.deleteOrder(order).subscribe({
       next: (data) => {
         this.uploadOrder = null;
         this.delete_Loading = null;
         this.deletedOrder = index;
-        this.deletedOrderError = true;
+        this.deletedOrderMessage = true;
         setTimeout(() => {
           this.deletedOrder = null;
           this.orders.splice(index, 1);
           this.uploadOrder = null;
-          this.deletedOrderError = null;
+          this.deletedOrderMessage = null;
+          this.delete_button_can_click = false;
         }, 500);
       },
       error: (err) => {
         this.delete_Loading = null;
-        this.deletedOrderError = false;
+        this.delete_button_can_click = false;
+        this.deletedOrderMessage = false;
         this.deletedOrder = null;
         console.log(err);
       },
