@@ -1,3 +1,14 @@
 .h-full {
   height: 80vh;
 }
+.showPassword {
+  border: none !important;
+  background-color: #ebebeb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.showPassword:focus,
+.showPassword:active {
+  border: none;
+}

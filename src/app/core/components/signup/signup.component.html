@@ -21,16 +21,14 @@
         >
           <div class="w-75">
             <h1 class="h3 mb-5 fw-normal w-100">Please sign-up</h1>
-            <div class="form-floating my-2 w-100">
+            <div class="my-2 w-100">
               <input
                 type="email"
                 formControlName="email"
                 class="form-control"
                 [class]="checkControlValidation(email, email?.valid)"
-                id="floatingInput"
                 placeholder="name@example.com"
               />
-              <label for="floatingInput">Email address</label>
               @if(email?.invalid && (email?.dirty || email?.touched)){
 
               <!-- required Email -->
@@ -47,16 +45,26 @@
               </p>
               } }
             </div>
-            <div class="form-floating my-2 w-100">
-              <input
-                type="password"
-                formControlName="password"
-                class="form-control"
-                [class]="checkControlValidation(password, password?.valid)"
-                id="floatingPassword"
-                placeholder="Password"
-              />
-              <label for="floatingPassword">Password</label>
+            <div class="my-2 w-100">
+              <div class="d-flex mb-3 position-relative align-items-center">
+                <input
+                  [type]="showPassword1 ? 'text' : 'password'"
+                  formControlName="password"
+                  class="form-control rounded-end-0"
+                  [class]="checkControlValidation(password, password?.valid)"
+                  placeholder="Password"
+                />
+                <!-- <label for="floatingPassword">Password</label> -->
+                <button
+                  class="btn end-0 rounded-start-0 showPassword"
+                  (click)="toggleShowPassword1()"
+                >
+                  <i
+                    class="bi bi-eye-fill text-secondary"
+                    [class]="showPassword1 ? 'bi-eye-fill' : 'bi-eye'"
+                  ></i>
+                </button>
+              </div>
               @if(password?.invalid && (password?.dirty || password?.touched)){
               <!-- empty password -->
               @if( password?.hasError('required')){
@@ -72,17 +80,26 @@
               } }
             </div>
             <div class="form-floating my-2 w-100">
-              <input
-                type="password"
-                [formControl]="confirmPassword"
-                class="form-control"
-                [class]="
-                  checkControlValidation(confirmPassword, confirmPassword.valid)
-                "
-                id="floatingPassword1"
-                placeholder="Re-enter Password"
-              />
-              <label for="floatingPassword1">Re-enter Password</label>
+              <div class="d-flex mb-3 position-relative align-items-center">
+                <input
+                  [type]="showPassword2 ? 'text' : 'password'"
+                  [formControl]="confirmPassword"
+                  class="form-control rounded-end-0"
+                  [class]="confimPasswordCheck()"
+                  id="floatingPassword1"
+                  placeholder="Re-enter Password"
+                />
+                <button
+                  class="btn rounded-start-0 showPassword"
+                  (click)="toggleShowPassword2()"
+                >
+                  <i
+                    class="bi bi-eye-fill text-secondary"
+                    [class]="showPassword2 ? 'bi-eye-fill' : 'bi-eye'"
+                  ></i>
+                </button>
+              </div>
+              <!-- <label for="floatingPassword1">Re-enter Password</label> -->
 
               @if(confirmPassword.invalid && (confirmPassword.dirty ||
               confirmPassword.touched)){
@@ -97,7 +114,11 @@
               <p class="text-start ps-2 invalid-feedback">
                 * password not Match.
               </p>
-              } }
+              } @if(password?.hasError('minlength')){
+              <p class="text-start ps-2 invalid-feedback">
+                * password must be 6 charachters or more.
+              </p>
+              }}
             </div>
             <button
               type="submit"

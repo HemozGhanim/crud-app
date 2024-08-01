@@ -22,6 +22,20 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrl: './signup.component.css',
 })
 export class SignupComponent {
+  constructor(
+    private _authService: AuthService,
+    private _router: Router,
+    private cookieService: CookieService,
+    private orderService: OrderService
+  ) {
+    let LocalId = this.cookieService.get('localId');
+    this.userLocalId = '';
+    if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
+      this.userLocalId = LocalId.slice(1, -1);
+    } else {
+      this.userLocalId = LocalId;
+    }
+  }
   //create user data
   protected createUserData: FormGroup<userData> = new FormGroup({
     email: new FormControl('', [
@@ -50,20 +64,15 @@ export class SignupComponent {
   createdSuccess: boolean = false;
   errorMessages: string = '';
   userLocalId: string = '';
+  showPassword1: boolean = false;
+  showPassword2: boolean = false;
 
-  constructor(
-    private _authService: AuthService,
-    private _router: Router,
-    private cookieService: CookieService,
-    private orderService: OrderService
-  ) {
-    let LocalId = this.cookieService.get('localId');
-    this.userLocalId = '';
-    if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
-      this.userLocalId = LocalId.slice(1, -1);
-    } else {
-      this.userLocalId = LocalId;
-    }
+  toggleShowPassword1() {
+    this.showPassword1 = !this.showPassword1;
+  }
+
+  toggleShowPassword2() {
+    this.showPassword2 = !this.showPassword2;
   }
 
   get email() {
@@ -123,5 +132,20 @@ export class SignupComponent {
       }
     }
   }
-
+  confimPasswordCheck() {
+    if (
+      this.confirmPassword.value == this.password?.value &&
+      !this.confirmPassword.hasError('minlength') &&
+      this.confirmPassword.value != '' &&
+      this.password?.value != ''
+    ) {
+      return 'is-valid';
+    } else {
+      if (this.confirmPassword.value == '') {
+        return '';
+      } else {
+        return 'is-invalid';
+      }
+    }
+  }
 }
