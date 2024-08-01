@@ -163,13 +163,12 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.edit_Loading = false;
         this.editedOrder = true;
         this.toggleEdit(order);
-        this.orders.splice(_index, 1);
-        this.orders.unshift({
+        this.orders[_index] = {
           id: order.id,
           orderName: editedData,
           isEditing: false,
           isDone: false,
-        });
+        };
         setTimeout(() => {
           this.editedOrder = null;
         }, 2000);
