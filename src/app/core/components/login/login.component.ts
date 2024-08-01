@@ -21,6 +21,11 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
+  constructor(
+    private _authService: AuthService,
+    private _router: Router,
+    private cookieService: CookieService
+  ) {}
   //user data
   protected credentials = new FormGroup({
     email: new FormControl('', [
@@ -41,14 +46,13 @@ export class LoginComponent implements OnInit {
   loadding: boolean = false;
   responseError: boolean = false;
   errorMessages: string = '';
-  constructor(
-    private _authService: AuthService,
-    private _router: Router,
-    private cookieService: CookieService
-  ) {}
+  showPassword: boolean = false;
 
   ngOnInit(): void {}
-
+  //toggle password
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
   //funciton on login
   get email() {
     return this.credentials.get('email');
@@ -57,7 +61,6 @@ export class LoginComponent implements OnInit {
     return this.credentials.get('password');
   }
   onSubmit() {
-    console.log(this.credentials.valid);
     if (this.credentials.valid) {
       this.loadding = true;
       this._authService.login(this.credentials.value).subscribe({
@@ -77,10 +80,7 @@ export class LoginComponent implements OnInit {
         error: (error) => {
           this.loadding = false;
           this.responseError = true;
-          console.log(error);
-          if (error.error.error.message == 'INVALID_LOGIN_CREDENTIALS') {
-            this.errorMessages = 'Invalid E-mail or Password';
-          }
+          this.errorMessages = error.error.error.message;
         },
       });
     }

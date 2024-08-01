@@ -46,7 +46,7 @@
               </div>
               <div class="form-floating">
                 <input
-                  type="password"
+                  [type]="showPassword ? 'text' : 'password'"
                   formControlName="password"
                   class="form-control"
                   id="floatingPassword"
@@ -73,11 +73,15 @@
                 <input
                   class="form-check-input"
                   type="checkbox"
-                  value="remember-me"
-                  id="flexCheckDefault"
+                  (change)="togglePasswordVisibility()"
+                  [checked]="showPassword"
                 />
-                <label class="form-check-label" for="flexCheckDefault">
-                  Remember me
+                <label
+                  class="form-check-label"
+                  for="flexCheckDefault"
+                  (click)="togglePasswordVisibility()"
+                >
+                  Show Password
                 </label>
               </div>
               <button
