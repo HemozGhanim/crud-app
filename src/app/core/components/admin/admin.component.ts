@@ -155,37 +155,39 @@ export class AdminComponent implements OnInit, OnDestroy {
   EditOrder(editedData: any, order: OrderData, _index: number) {
     this.checkInputField(editedData, order);
     this.edit_Loading = true;
-    this._orderService.editOrder(editedData, order).subscribe({
-      next: (data) => {
-        this.orders.map((el, index) => {
-          index == _index ? (el.orderName = editedData) : null;
-        });
-        this.edit_Loading = false;
-        this.editedOrder = true;
-        this.toggleEdit(order);
-        this.orders[_index] = {
-          id: order.id,
-          orderName: editedData,
-          isEditing: false,
-          isDone: false,
-        };
-        setTimeout(() => {
-          this.editedOrder = null;
-        }, 2000);
-      },
-      error: (err) => {
-        this.edit_Loading = false;
-        this.editedOrder = false;
-        console.log(err);
-      },
-    });
+    this._orderService
+      .editOrder(editedData, order, this.userLocalId)
+      .subscribe({
+        next: (data) => {
+          this.orders.map((el, index) => {
+            index == _index ? (el.orderName = editedData) : null;
+          });
+          this.edit_Loading = false;
+          this.editedOrder = true;
+          this.toggleEdit(order);
+          this.orders[_index] = {
+            id: order.id,
+            orderName: editedData,
+            isEditing: false,
+            isDone: false,
+          };
+          setTimeout(() => {
+            this.editedOrder = null;
+          }, 2000);
+        },
+        error: (err) => {
+          this.edit_Loading = false;
+          this.editedOrder = false;
+          console.log(err);
+        },
+      });
   }
 
   //delete Orders
   deleteOrder(order: OrderData, index: number) {
     this.delete_Loading = index;
     this.delete_button_can_click = true;
-    this._orderService.deleteOrder(order).subscribe({
+    this._orderService.deleteOrder(order, this.userLocalId).subscribe({
       next: (data) => {
         this.uploadOrder = null;
         this.delete_Loading = null;

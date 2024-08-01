@@ -55,7 +55,7 @@
                   placeholder="Password"
                 />
                 <!-- <label for="floatingPassword">Password</label> -->
-                <button
+                <a
                   class="btn end-0 rounded-start-0 showPassword"
                   (click)="toggleShowPassword1()"
                 >
@@ -63,7 +63,7 @@
                     class="bi bi-eye-fill text-secondary"
                     [class]="showPassword1 ? 'bi-eye-fill' : 'bi-eye'"
                   ></i>
-                </button>
+                </a>
               </div>
               @if(password?.invalid && (password?.dirty || password?.touched)){
               <!-- empty password -->
@@ -89,7 +89,7 @@
                   id="floatingPassword1"
                   placeholder="Re-enter Password"
                 />
-                <button
+                <a
                   class="btn rounded-start-0 showPassword"
                   (click)="toggleShowPassword2()"
                 >
@@ -97,7 +97,7 @@
                     class="bi bi-eye-fill text-secondary"
                     [class]="showPassword2 ? 'bi-eye-fill' : 'bi-eye'"
                   ></i>
-                </button>
+                </a>
               </div>
               <!-- <label for="floatingPassword1">Re-enter Password</label> -->
 
