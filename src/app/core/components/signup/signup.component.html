@@ -21,14 +21,17 @@
         >
           <div class="w-75">
             <h1 class="h3 mb-5 fw-normal w-100">Please sign-up</h1>
-            <div class="my-2 w-100">
+            <div class="my-2 w-100 form-floating">
               <input
                 type="email"
                 formControlName="email"
                 class="form-control"
                 [class]="checkControlValidation(email, email?.valid)"
                 placeholder="Email"
+                id="emailForm"
               />
+              <label for="emailForm">Email</label>
+
               @if(email?.invalid && (email?.dirty || email?.touched)){
 
               <!-- required Email -->
@@ -46,14 +49,19 @@
               } }
             </div>
             <div class="my-2 w-100">
-              <div class="d-flex mb-3 position-relative align-items-center">
-                <input
-                  [type]="showPassword1 ? 'text' : 'password'"
-                  formControlName="password"
-                  class="form-control rounded-end-0"
-                  [class]="checkControlValidation(password, password?.valid)"
-                  placeholder="Password"
-                />
+              <div
+                class="d-flex form-control p-0 mb-3 position-relative align-items-center"
+              >
+                <div class="w-100 form-floating">
+                  <input
+                    [type]="showPassword1 ? 'text' : 'password'"
+                    formControlName="password"
+                    class="form-control input-field-test rounded-end-0"
+                    [class]="checkControlValidation(password, password?.valid)"
+                    placeholder="Password"
+                  />
+                  <label for="emailForm">Password</label>
+                </div>
                 <a
                   class="btn end-0 rounded-start-0 showPassword"
                   (click)="toggleShowPassword1()"
@@ -67,27 +75,32 @@
               @if(password?.invalid && (password?.dirty || password?.touched)){
               <!-- empty password -->
               @if( password?.hasError('required')){
-              <p class="text-start ps-2 invalid-feedback">
+              <p class="text-start ps-2 invalid text-danger">
                 * Please enter your password.
               </p>
               }
               <!-- invalid password -->
               @if(password?.hasError('minlength')){
-              <p class="text-start ps-2 invalid-feedback">
+              <p class="text-start ps-2 invalid text-danger">
                 * password must be 6 charachters or more.
               </p>
               } }
             </div>
             <div class="my-2 w-100">
-              <div class="d-flex mb-3 position-relative align-items-center">
-                <input
-                  [type]="showPassword2 ? 'text' : 'password'"
-                  [formControl]="confirmPassword"
-                  class="form-control rounded-end-0"
-                  [class]="confimPasswordCheck()"
-                  id="floatingPassword1"
-                  placeholder="Re-enter Password"
-                />
+              <div
+                class="d-flex form-control p-0 mb-3 position-relative align-items-center"
+              >
+                <div class="w-100 form-floating">
+                  <input
+                    [type]="showPassword2 ? 'text' : 'password'"
+                    [formControl]="confirmPassword"
+                    class="form-control input-field-test rounded-end-0"
+                    [class]="confimPasswordCheck()"
+                    id="floatingPassword1"
+                    placeholder="Re-enter Password"
+                  />
+                  <label for="floatingPassword1">Re-enter password</label>
+                </div>
                 <a
                   class="btn rounded-start-0 showPassword"
                   (click)="toggleShowPassword2()"
@@ -103,17 +116,17 @@
               confirmPassword.touched)){
               <!-- empty field -->
               @if( confirmPassword.hasError('required')){
-              <p class="text-start ps-2 invalid-feedback">
+              <p class="text-start ps-2 invalid text-danger">
                 * Please enter your password.
               </p>
               }
               <!-- invaled confirmed password -->
               @if(confirmPassword.value != password?.value ){
-              <p class="text-start ps-2 invalid-feedback">
+              <p class="text-start ps-2 invalid text-danger">
                 * password not Match.
               </p>
               } @if(password?.hasError('minlength')){
-              <p class="text-start ps-2 invalid-feedback">
+              <p class="text-start ps-2 invalid text-danger">
                 * password must be 6 charachters or more.
               </p>
               }}
