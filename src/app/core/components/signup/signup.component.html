@@ -54,7 +54,6 @@
                   [class]="checkControlValidation(password, password?.valid)"
                   placeholder="Password"
                 />
-                <!-- <label for="floatingPassword">Password</label> -->
                 <a
                   class="btn end-0 rounded-start-0 showPassword"
                   (click)="toggleShowPassword1()"
@@ -79,7 +78,7 @@
               </p>
               } }
             </div>
-            <div class="form-floating my-2 w-100">
+            <div class="my-2 w-100">
               <div class="d-flex mb-3 position-relative align-items-center">
                 <input
                   [type]="showPassword2 ? 'text' : 'password'"
@@ -99,7 +98,6 @@
                   ></i>
                 </a>
               </div>
-              <!-- <label for="floatingPassword1">Re-enter Password</label> -->
 
               @if(confirmPassword.invalid && (confirmPassword.dirty ||
               confirmPassword.touched)){

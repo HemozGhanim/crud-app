@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 
 import {
   CanActivate,
@@ -12,16 +11,18 @@ import {
   providedIn: 'root',
 })
 export class isLoggedGuard implements CanActivate {
-  constructor(private router: Router, private cookieService: CookieService) {}
+  constructor(private router: Router) {}
+
+  authUser: string | null = '';
+
   isLoggedIn() {
-    if (this.cookieService.get('authUser')) {
+    if (window.localStorage.getItem('authUser')) {
       return true;
     }
     return false;
   }
   canActivate(
     next: ActivatedRouteSnapshot,
-
     state: RouterStateSnapshot
   ): boolean {
     if (this.isLoggedIn()) {

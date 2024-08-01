@@ -1,23 +1,21 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { catchError, Observable, tap } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
+
   //variables
   JWT_token: string = '';
   baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:';
   API_key = 'AIzaSyCzBCPpGlVjQ2JvPfgl2-EpqmcX8MIxHGU';
-
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private cookieService: CookieService
-  ) {}
 
   //call login server function
   login(data: any): Observable<any> {
@@ -34,13 +32,13 @@ export class AuthService {
 
   //function to signOut
   signOut() {
-    this.cookieService.deleteAll();
+    window.localStorage.clear();
     this.isLoggedIn();
   }
 
   //function to check he is auth or not
   isLoggedIn() {
-    if (this.cookieService.get('authUser')) {
+    if (window.localStorage.getItem('authUser')) {
       return true;
     }
     return false;

@@ -3,7 +3,6 @@ import { OrderService } from '../../../core/services/order.service';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { OrderData } from '../../../shared/interfaces/orders';
 import { Subscription } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-admin',
@@ -13,8 +12,21 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrl: './admin.component.css',
 })
 export class AdminComponent implements OnInit, OnDestroy {
+  constructor(
+    private _orderService: OrderService,
+  ) {
+    let LocalId: any = JSON.parse(
+      window.localStorage.getItem('localId') as string
+    );
+    this.userLocalId = '';
+    if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
+      this.userLocalId = LocalId.slice(1, -1);
+    } else {
+      this.userLocalId = LocalId;
+    }
+  }
   //user variables
-  userLocalId: string = '';
+  userLocalId: any;
 
   //new order variables
   orderData = '';
@@ -44,18 +56,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   //testing variables
   disabled: boolean = true;
   deleting_order: any;
-  constructor(
-    private _orderService: OrderService,
-    private _cookieService: CookieService
-  ) {
-    let LocalId = this._cookieService.get('localId');
-    this.userLocalId = '';
-    if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
-      this.userLocalId = LocalId.slice(1, -1);
-    } else {
-      this.userLocalId = LocalId;
-    }
-  }
+
   ngOnInit() {
     this.getOrders();
   }
@@ -107,12 +108,6 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.Creat_Loading = false;
     } else {
       let orderIsExist = this.orders.some((el) => {
-        // console.log(el.orderName);
-        // console.log(this.orderData);
-        // el.orderName.trim();
-        // this.orderData.trim();
-        // console.log(el.orderName);
-        console.log(this.orderData.trim());
         return el.orderName.trim() === this.orderData.trim();
       });
       if (orderIsExist == true) {

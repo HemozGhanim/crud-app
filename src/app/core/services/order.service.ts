@@ -1,31 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, Subject, tap } from 'rxjs';
-import { AuthService } from './auth.service';
-import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
 import { OrderData } from '../../shared/interfaces/orders';
 @Injectable({
   providedIn: 'root',
 })
 export class OrderService {
+  constructor(private http: HttpClient) {}
+
   //variabes
   baseUrl = 'https://likecard-e68b3-default-rtdb.firebaseio.com/';
-  userLocalId: string = '';
   orders: OrderData[] = [];
-
-  constructor(
-    private http: HttpClient,
-    private _cookieService: CookieService,
-    private _AuthService: AuthService
-  ) {
-    let LocalId = this._cookieService.get('localId');
-    this.userLocalId = '';
-    if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
-      this.userLocalId = LocalId.slice(1, -1);
-    } else {
-      this.userLocalId = LocalId;
-    }
-  }
 
   //call to get orders from database ( server ) 'using firebase realtime DB '
   getOrders(userId: string) {
@@ -47,9 +32,6 @@ export class OrderService {
     _order: OrderData,
     userId: string
   ): Observable<any> {
-    console.log(_editedData, _order);
-    console.log(this.userLocalId);
-    console.log(_order.id);
     return this.http.put(
       `${this.baseUrl}orders/${userId}/created/${_order.id}.json`,
       {

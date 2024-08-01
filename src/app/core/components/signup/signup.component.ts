@@ -2,7 +2,6 @@ import { OrderService } from '../../../core/services/order.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Component } from '@angular/core';
 import {
-  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
@@ -12,7 +11,6 @@ import {
 import { userData } from '../../../shared/interfaces/userdata';
 import { Router, RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-signup',
@@ -25,17 +23,8 @@ export class SignupComponent {
   constructor(
     private _authService: AuthService,
     private _router: Router,
-    private cookieService: CookieService,
     private orderService: OrderService
-  ) {
-    let LocalId = this.cookieService.get('localId');
-    this.userLocalId = '';
-    if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
-      this.userLocalId = LocalId.slice(1, -1);
-    } else {
-      this.userLocalId = LocalId;
-    }
-  }
+  ) {}
   //create user data
   protected createUserData: FormGroup<userData> = new FormGroup({
     email: new FormControl('', [
@@ -59,7 +48,6 @@ export class SignupComponent {
 
   //variables
   loadding: boolean = false;
-  // confirmPassword: string = '';
   responseError: boolean = false;
   createdSuccess: boolean = false;
   errorMessages: string = '';
@@ -95,13 +83,12 @@ export class SignupComponent {
       this.loadding = true;
       this._authService.signup(this.createUserData.value).subscribe({
         next: (data) => {
-          this.cookieService.set('authUser', JSON.stringify(data.idToken));
-          this.cookieService.set('localId', JSON.stringify(data.localId));
-          this.cookieService.set('userEmail', JSON.stringify(data.email));
+          window.localStorage.setItem('authUser', JSON.stringify(data.idToken));
+          window.localStorage.setItem('localId', JSON.stringify(data.localId));
+          window.localStorage.setItem('userEmail', JSON.stringify(data.email));
           this.loadding = true;
           this.responseError = false;
           this.createdSuccess = true;
-          this.orderService.getOrders(this.userLocalId);
           setTimeout(() => {
             this.createdSuccess = false;
             this.createUserData.reset();

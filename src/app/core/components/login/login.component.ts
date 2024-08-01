@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { NgOptimizedImage } from '@angular/common';
-import { CookieService } from 'ngx-cookie-service';
 import {
   FormsModule,
   FormControl,
@@ -24,7 +23,6 @@ export class LoginComponent implements OnInit {
   constructor(
     private _authService: AuthService,
     private _router: Router,
-    private cookieService: CookieService
   ) {}
   //user data
   protected credentials = new FormGroup({
@@ -65,9 +63,9 @@ export class LoginComponent implements OnInit {
       this.loadding = true;
       this._authService.login(this.credentials.value).subscribe({
         next: (data) => {
-          this.cookieService.set('authUser', JSON.stringify(data.idToken));
-          this.cookieService.set('localId', JSON.stringify(data.localId));
-          this.cookieService.set('userEmail', JSON.stringify(data.email));
+          window.localStorage.setItem('authUser', JSON.stringify(data.idToken));
+          window.localStorage.setItem('localId', JSON.stringify(data.localId));
+          window.localStorage.setItem('userEmail', JSON.stringify(data.email));
           if (this._authService.isLoggedIn()) {
             this.loadding = true;
             this.responseError = false;

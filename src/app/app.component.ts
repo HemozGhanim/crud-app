@@ -10,8 +10,7 @@ import { NavbarComponent } from './core/components/navbar/navbar.component';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }
