@@ -29,15 +29,15 @@ export class AuthService {
 
   //function to signOut
   signOut() {
-    window?.localStorage.clear();
+    localStorage.clear();
     this.isLoggedIn();
   }
 
   //function to check he is auth or not
-  
+
   get localData() {
     if (typeof window !== 'undefined' && window.localStorage) {
-      return window.localStorage.getItem('authUser');
+      return localStorage.getItem('authUser');
     }
     return null;
   }

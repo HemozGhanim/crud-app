@@ -1,23 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { OrderService } from '../../../core/services/order.service';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { OrderData } from '../../../shared/interfaces/orders';
 import { Subscription } from 'rxjs';
+import { OrderComponent } from '../../../shared/components/order/order.component';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, OrderComponent],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
 })
 export class AdminComponent implements OnInit, OnDestroy {
-  constructor(
-    private _orderService: OrderService,
-  ) {
-    let LocalId: any = JSON.parse(
-      window.localStorage.getItem('localId') as string
-    );
+  constructor(private _orderService: OrderService) {
+    let LocalId: any = JSON.parse(localStorage.getItem('localId') as string);
     this.userLocalId = '';
     if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
       this.userLocalId = LocalId.slice(1, -1);
@@ -25,6 +22,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.userLocalId = LocalId;
     }
   }
+
   //user variables
   userLocalId: any;
 
@@ -146,14 +144,18 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   //edit Orders
-
+  handleDataChange(updatedData: string) {
+    this.EditorderData = updatedData;
+  }
   EditOrder(editedData: any, order: OrderData, _index: number) {
     this.checkInputField(editedData, order);
+    console.log(this.checkInputField(editedData, order));
     this.edit_Loading = true;
     this._orderService
       .editOrder(editedData, order, this.userLocalId)
       .subscribe({
         next: (data) => {
+          console.log('edited');
           this.orders.map((el, index) => {
             index == _index ? (el.orderName = editedData) : null;
           });

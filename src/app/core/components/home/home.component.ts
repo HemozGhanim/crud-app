@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
     private _authService: AuthService,
     private _orderService: OrderService
   ) {
-    let LocalId = JSON.parse(window.localStorage.getItem('localId') || '');
+    let LocalId = JSON.parse(localStorage.getItem('localId') || '');
     this.userId = '';
     if (LocalId.startsWith('"') && LocalId.endsWith('"')) {
       this.userId = LocalId.slice(1, -1);
@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userData = JSON.parse(window.localStorage.getItem('userEmail') || '');
+    this.userData = JSON.parse(localStorage.getItem('userEmail') || '');
     this.userEmail = '';
     if (this.userData.startsWith('"') && this.userData.endsWith('"')) {
       this.userEmail = this.userData.slice(1, -1);

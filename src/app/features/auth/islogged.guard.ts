@@ -15,9 +15,6 @@ export class isLoggedGuard implements CanActivate {
   constructor(private router: Router, private _authService: AuthService) {}
 
   authUser: string | null = '';
-  // get localData() {
-  //   return localStorage.getItem('authUser');
-  // }
 
   canActivate(
     next: ActivatedRouteSnapshot,

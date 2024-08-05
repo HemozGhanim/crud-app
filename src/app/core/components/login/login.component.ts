@@ -20,10 +20,7 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
-  constructor(
-    private _authService: AuthService,
-    private _router: Router,
-  ) {}
+  constructor(private _authService: AuthService, private _router: Router) {}
   //user data
   protected credentials = new FormGroup({
     email: new FormControl('', [
@@ -63,9 +60,9 @@ export class LoginComponent implements OnInit {
       this.loadding = true;
       this._authService.login(this.credentials.value).subscribe({
         next: (data) => {
-          window.localStorage.setItem('authUser', JSON.stringify(data.idToken));
-          window.localStorage.setItem('localId', JSON.stringify(data.localId));
-          window.localStorage.setItem('userEmail', JSON.stringify(data.email));
+          localStorage.setItem('authUser', JSON.stringify(data.idToken));
+          localStorage.setItem('localId', JSON.stringify(data.localId));
+          localStorage.setItem('userEmail', JSON.stringify(data.email));
           if (this._authService.isLoggedIn()) {
             this.loadding = true;
             this.responseError = false;

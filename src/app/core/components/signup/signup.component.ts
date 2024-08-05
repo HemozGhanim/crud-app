@@ -83,9 +83,9 @@ export class SignupComponent {
       this.loadding = true;
       this._authService.signup(this.createUserData.value).subscribe({
         next: (data) => {
-          window.localStorage.setItem('authUser', JSON.stringify(data.idToken));
-          window.localStorage.setItem('localId', JSON.stringify(data.localId));
-          window.localStorage.setItem('userEmail', JSON.stringify(data.email));
+          localStorage.setItem('authUser', JSON.stringify(data.idToken));
+          localStorage.setItem('localId', JSON.stringify(data.localId));
+          localStorage.setItem('userEmail', JSON.stringify(data.email));
           this.loadding = true;
           this.responseError = false;
           this.createdSuccess = true;
@@ -119,6 +119,7 @@ export class SignupComponent {
       }
     }
   }
+
   confimPasswordCheck() {
     if (
       this.confirmPassword.value == this.password?.value &&
