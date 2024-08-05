@@ -3,7 +3,6 @@
 }
 .showPassword {
   border: none !important;
-  background-color: #ebebeb;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,4 +10,13 @@
 .showPassword:focus,
 .showPassword:active {
   border: none;
+}
+
+.form-control:focus,
+.form-control:visited,
+.input-field-test {
+  border: none !important;
+}
+.input-field-test {
+  box-shadow: none !important;
 }
